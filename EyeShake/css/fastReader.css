@@ -9,6 +9,9 @@
 
 .text-panel{
 	height:100px;
+	position:absolute;
+	z-index:2;
+	margin-top:200px;
 }
 
 .panel div {
@@ -16,8 +19,15 @@
 	margin-right: 200px;
 }
 
+.book {
+  position:absolute;
+  background:transparent;
+  z-index:1;
 
-
+}
+.transparent {
+  color:#E3E7E7;
+}
 
 
 .panel p.look, p.marker { 

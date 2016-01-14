@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bootstrap 101 Template</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"  accept-charset="utf-8">
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/fastReader.css" rel="stylesheet">
+	
+
+	<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+		<![endif]-->
+		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<!-- Include all compiled plugins (below), or include individual files as needed -->
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/fastReader.js"></script>
+	</head>
+	<body>
+		<form id="main_form" role="form" style="background-color=#F7D358" action="handler.php" method="POST" enctype=multipart/form-data>
+			<div class="panel panel-default">
+				<div class="panel-heading width">
+					<button id="less_width" type="button" class="btn btn-default" ><span class="glyphicon glyphicon-minus"></span></button>
+					<button id="more_width" type="button" class="btn btn-default" ><span class="glyphicon glyphicon-plus"></span></button>
+					<p id="width-checker"></p>
+				
+					<button id="less_words" type="button" class="btn btn-default" ><span class="glyphicon glyphicon-minus"></span></button>
+					<button id="more_words" type="button" class="btn btn-default" ><span class="glyphicon glyphicon-plus"></span></button>
+					<p id="number_words"></p>
+				
+					<button id="less_time_to_read" type="button" class="btn btn-default" ><span class="glyphicon glyphicon-minus"></span></button>
+					<button id="more_time_to_read" type="button" class="btn btn-default" ><span class="glyphicon glyphicon-plus"></span></button>
+					<p id="time_to_read"></p>
+			  
+				</div>
+					<div class="form-group">
+						<label for="response">Response</label>
+						<input type="text" class="form-control" id="response" placeholder="Press Enter to start. Write response and press Enter to check" autofocus="autofocus">
+					</div>
+			<div >
+				<div class="book">
+					<p type="text" class="form-control" id="text-bucket"  placeholder="Paste text here so you can start to play">
+					</p>
+					<span id="text-bucket-init" class="transparent">###################</span>
+					<span id="text-bucket-styled" style="color:blue"></span>
+					<span id="text-bucket-end" class="transparent"></span>
+				</div>
+			</div>
+				<div class="text-panel ">
+					<div id="text" class="look fulljustify">| |</div>
+				</div>
+			<div class="panel panel-default">
+		</div>
+			<div>
+	     
+		  
+			</div>
+			<div id="success_message"  style="display:none" class="alert alert-success">
+				<a href="#" class="alert-link">Right on!</a>
+			</div>
+			<div id="error_message" style="display:none" class="alert alert-danger">
+				<a href="#" class="alert-link"></a>
+			</div>
+		</form>
+ 
+
+	</body>
+	<span id="editor"></span>
+			  <input type="file" id="file-select" name="photos[]" multiple/>
+			    <button type="submit" id="upload-button">Upload</button>
+	</html>
