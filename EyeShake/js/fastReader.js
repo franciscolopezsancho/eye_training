@@ -1,22 +1,6 @@
-(function($) {
-    $.rand = function(arg) {
-        if ($.isArray(arg)) {
-            return arg[$.rand(arg.length)];
-        } else if (typeof arg === "number") {
-            return Math.floor(Math.random() * arg);
-        } else {
-            return 4;  // chosen by fair dice roll
-        }
-    };
-})(jQuery);
-
-function my_random(max){
-	 return Math.floor(Math.random() * max)
-}
-
 var items = ['Im very happy'];
-var width = 300;
-var time_to_read = 500;
+var width = 600;
+var time_to_read = 100;
 var text = 'In the twelfth and thirteenth centuries, the Jurchen Jin Dynasty (1115–1234) waged a series of military campaigns against the Chinese Song Dynasty (960–1279). In 1115, the Jurchens rebelled against their overlords, the Khitans of the Liao Dynasty (907–1125), and declared the formation of the Jin. Allying with the Song against their common enemy the Liao, the Jin promised to return to the Song the territories in northern China that had fallen under Liao control since 938. The Jurchens quick defeat of the Liao combined with Song military failures made the Jin reluctant to cede these territories. After a series of failed negotiations that embittered both sides, the Jurchens attacked the Song in November 1125, dispatching one army towards Taiyuan and the other towards Kaifeng, the Song capital. Surprised by the news of an invasion, the Song general stationed in Taiyuan retreated from the city, which was besieged and later captured. As the second Jin army approached the capital, Emperor Huizong of the Song abdicated and fled south. A new emperor, Qinzong, was enthroned. The Jurchens began a siege against Kaifeng in 1126, but Qinzong negotiated for their retreat from the capital after he agreed to pay a large annual indemnity. Qinzong reneged on the deal and ordered Song forces to defend the prefectures instead of fortifying the capital. The Jin resumed their war against the Song and again besieged Kaifeng in 1127. The Chinese emperor was captured in an event known as the Jingkang Incident, the capital was looted, and the Song lost northern China to the Jin. Remnants of the Song retreated to southern China and, after brief stays in several temporary capitals, eventually relocated to Hangzhou. The retreat of the Song court marked the end of the Northern Song era and the beginning of the Southern Song.'
 //var text = 'Lorem ipsum dolor draw attention sit amet, consectetuer adipiscing elit. Nam nibh. Nunc varius facilisis eros';
 var number_words = 3;
@@ -52,9 +36,8 @@ function apply_number_words(){
 }
 
 function apply_width(){
-	$("#text").css("width",this.width)
-	$("#marker").css("width",this.width)
-	$("#width-checker").text(this.width)
+	$("#reader").css("width",this.width)
+	
 	
 	
 }
@@ -68,22 +51,87 @@ function shrink_width(){
 	modify_width(-50)
 }
 
+var lastTopPar = "";
+var lastBottomPar = "";
+
 
 
 function build_div(pos){	
 	var words = get_words(text,number_words,pos); 
 	words_to_watch = print_words(words[0]);
 	var index = text.indexOf(words_to_watch)
-	$("#text").text(words_to_watch);
+	//$("#text").text(words_to_watch);
+	lastTopPar = append_p_to_div(this.text.substring(index,  index + words_to_watch.length),"#upper-container",lastTopPar,true)
 	printPart(this.text,0,index,"text-bucket-init")
-	printPart(this.text,index,  index + words_to_watch.length,"text-bucket-styled")
-	printPart(this.text,index + words_to_watch.length, this.text.length,"text-bucket-end")
+	printPart(this.text,index,index + words_to_watch.length,"text-bucket-styled")
+	update_bottom(words_to_watch)
 	return words[1];
 }
 
-function deletes(){
-	$("#text").text('| |');
+function build_div2(paragraphId,number_words){
+	
 }
+
+function append_p_to_div(words,div,lastPar,up){
+	if(words.indexOf("\n")>-1){
+		$(div).append("<p>"+lastPar + words.substring(0,words.indexOf("\n"))+"</p>")
+		var dif = $(div)
+		if(up){dif.scrollTop(dif[0].scrollHeight)}else{};
+		return words.substring(words.indexOf("\n"),words.length)
+	}
+	return lastPar + words
+}
+
+function populate_bottom(text) {
+	$.each(text.split("\n"),function( index,paragraph ) {
+		$("#text-bucket-end").append("<p>"+paragraph+"</p>")
+	})
+}
+function build_paragraph(text,div,order){
+	var content = $(div+" p").apply(order).text()
+	if(text.indexOf("\n")>-1){
+		$(div+ " p").apply(order).remove()		
+	}else{
+		$(div+ " p").apply(order).remove()
+		$(div).append("<p>"+content.substring(content.indexOf(text)+text.length)+"</p>")		
+	}	
+}
+
+function take_from_text(paragraph,amount){
+	paragraph.substring(paragraph.indexOf(amount))
+}
+
+function take_from_paragraph(div,number_words){
+	
+	var content = $(div+" p").apply(order).text()
+	if(text.indexOf("\n")>-1){
+		$(div+ " p").apply(order).remove()		
+	}else{
+		$(div+ " p").apply(order).remove()
+		$(div).append("<p>"+content.substring(content.indexOf(text)+text.length)+"</p>")		
+	}	
+}
+
+
+
+//not need a function for this
+function redistribute_paragraph(paragraph,amount,dest1,dest2,dest3){
+	dest3(dest2(dest1(paragraph,text)))
+}
+
+function update_bottom(text) {
+	var content = $("#text-bucket-end p").first().text()
+	if(text.indexOf("\n")>-1){
+		$("#text-bucket-end p").first().remove()
+		
+	}else{
+		$("#text-bucket-end p").first().remove()
+		$("#text-bucket-end").prepend("<p>"+content.substring(content.indexOf(text)+text.length)+"</p>")		
+	}
+}
+
+
+
 var currentPos = 0;
 function blink(){
 	currentPos = build_div(this.currentPos);
@@ -100,9 +148,7 @@ function get_words(text,number_words,pos){
 	var words_sin = 0;
 	for(var i=0;words_sin<number_words;i++){
 		chunk[i] = words[pos+i];
-		if(!has_sin(chunk[i])){
-			words_sin = words_sin + 1
-		}
+		words_sin = words_sin + 1
 		
 	}
 	return [chunk,pos+chunk.length];
@@ -112,36 +158,8 @@ function printPart(initText,from,to,where){
 	$("#"+where).text(initText.substring(from,to))
 }
 
-function count_words_sin(text){
-	var has_sin = 0 
-	for(var i in forbidden_punctuations){
-		if(text.indexOf(forbidden_punctuations[i]) != -1){
-			has_sin = has_sin + 1;
-		}		
-	}
-	return has_sin;
-}
 
-var forbidden_punctuations = [',','.',';',':'];
-//if has any forbidden punctuation sign return true
-function has_sin(text){
-	var has_sin = false
-	for(var i in forbidden_punctuations){
-		if(text.indexOf(forbidden_punctuations[i]) != -1){
-			has_sin = true;
-			break;
-		}		
-	}
-	return has_sin;
-}
 
-function avoid_pause_simbols(text,number_words){
-	var chunk = new Array();	
-	while(chunk == null  || chunk.length == 0){
-		chunk = get_words(text,number_words);
-	}
-	return chunk;
-}
 
 function print_words(words){
 	var to_print = '';
@@ -153,33 +171,6 @@ function print_words(words){
 
 
 
-var already_responded = false;
-
-function manage_check_response(){
-	if($("#response") == null || $("#response").val() == ''){
-		blink();		
-	}else{
-		check_response();			
-	}
-}
-
-function check_response(){
-	
-	if(!($("#response").val().trim() == words_to_watch.trim())){
-		$("#error_message").text('Response was:'+ words_to_watch )
-		$("#error_message").show();	
-		setTimeout(function(){
-			$("#error_message").hide();	
-		},5000);
-	}else{
-		$("#success_message").show();	
-		setTimeout(function(){
-			$("#success_message").hide();	
-		},1000);
-	}
-	$("#response").val("");
-	
-}
 
 
 
@@ -203,7 +194,7 @@ $(document).ready(function() {
 	});
 	//avoiding reload page
 	$("#response").bind("enterKey",function(e){
-		manage_check_response();
+		blink();
 		});
 	$("#response").keydown(function(e){
 	    if(e.keyCode == 13)
@@ -251,7 +242,10 @@ function assign_to_bucket(text) {
 }
 
 function receivedText() {
-	    document.getElementById('editor').appendChild(document.createTextNode(fr.result));
+	  //document.getElementById('editor').appendChild(document.createTextNode(fr.result));
+	assign_to_bucket(fr.result);
+	populate_bottom(fr.result)
+	  
 	      }    
 
 

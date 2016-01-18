@@ -1,18 +1,4 @@
-.fulljustify {
-	text-align: justify;
-}
-.fulljustify:after {
-	content: "";
-	display: inline-block;
-	width: 100%;
-}
 
-.text-panel{
-	height:100px;
-	position:absolute;
-	z-index:2;
-	margin-top:200px;
-}
 
 .panel div {
 	margin-left: 200px;
@@ -20,23 +6,46 @@
 }
 
 .book {
-  position:absolute;
-  background:transparent;
-  z-index:1;
+  position:relative;
 
 }
 .transparent {
   color:#E3E7E7;
 }
 
-
-.panel p.look, p.marker { 
-	margin-left: 300px; 
-	margin-right: 300px;
-	background-image:url('../images/marker.gif');
-	background-position:center;  ;
+.upper {
+	position: relative;
+	top:0px;
+	height:400px;
+	width:800px;
+	overflow-y:scroll;
+	
+	color:#E3E7E7;
 }
 
+.text-upper {
+	position: absolute;
+	bottom:0px;
+	overflow-y:scroll;
+	height:20px;
+	
+	
+}
+.reader {
+	position: absolute;
+	top:400px;
+	height:50px;
+	width:300px;
+}
+.downer {
+	position: absolute;
+	top:450px;
+	height:400px;
+	width:800px;
+	overflow:scroll;
+	
+	color:#A3E7E7;
+}
 
 .panel button.play  {
 	margin-left: 200px;
@@ -47,8 +56,4 @@ textarea.text-background {
 	z-index=100;
 }
 
-#overlay {
-	    background-color: #EEEEEE;
-	        position: absolute;
-		    z-index:100;
-	    }
+
