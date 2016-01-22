@@ -55,7 +55,6 @@ var lastTopPar = "";
 var lastBottomPar = "";
 
 
-
 // function build_div(pos){
 // 	var words = get_words(text,number_words,pos);
 // 	words_to_watch = print_words(words[0]);
@@ -82,11 +81,11 @@ var lastBottomPar = "";
 // 	return lastPar + words
 // }
 //
-// function populate_bottom(text) {
-// 	$.each(text.split("\n"),function( index,paragraph ) {
-// 		$("#text-bucket-end").append("<p>"+paragraph+"</p>")
-// 	})
-// }
+function populate_bottom(text) {
+	$.each(text.split("\n"),function( index,paragraph ) {
+		$("#bottom-container").append("<p>"+paragraph+"</p>")
+	})
+}
 // function build_paragraph(text,div,order){
 // 	var content = $(div+" p").apply(order).text()
 // 	if(text.indexOf("\n")>-1){
@@ -103,57 +102,7 @@ var lastBottomPar = "";
 //make blink reader on punto
 //make blink upper on punto y aparte
 
-// FastReader.prototype.redistributing_to_center_up = function (from,to,amount){
-// 	var dist = this.move_text(from.children().first().text(),to.text(),amount,true)
-// 	from.children().first().text(dist[0])
-// 	to.text(dist[1])
-// 	if(from.children().first().text().trim() == ''){
-// 		from.children().first().remove()
-// 	}
-// }
-// FastReader.prototype.redistributing_to_center_down = function (from,to,amount){
-// 	var dist = this.move_text(from.children().first().text(),to.text(),amount,true)
-// 	from.children().first().text(dist[0])
-// 	to.text(dist[1])
-// 	if(from.children().first().text().trim() == ''){
-// 		from.children().first().remove()
-// 	}
-// }
 
-// function move_text(fromDiv,toDiv,amount){
-// 	var textFrom = fromDiv.text()
-// 	var text2Move = take_text(textFrom,amount,true)
-// 	toDiv.text(toDiv.text()+text2Move)
-// 	fromDiv.text(textFrom.substring(0,lastIndexOfRec(textFrom,amount," ")))
-// }
-
-
-
-// function goingUp(amount){
-// 	var dist = move_text($("#text-bucket-styled").text(),$("#text-bucket-init p").last().text(),amount)
-// 	$("#text-bucket-styled").text(dist[0])
-// 	$("#text-bucket-init p").last().text(dist[1])
-// 	//redistribute(dist,$("#text-bucket-init p").last(),$("#text-bucket-init"),false)
-// 	// move_text($("#text-bucket-end p").first(),$("#text-bucket-styled"),amount)
-// // 	redistribute($("#text-bucket-end p").first(),$("#text-bucket-end"),true)
-//
-// }
-//
-// function redistribute(child,parentt,first){
-// 	child.text(what.text().substring(0,what.text().indexOf("\n")))
-// 	if(first){
-// 		parentt.append("<p>"+child.text()+"</p>")
-// 	}else{
-// 		parentt.prepend("<p>"+child.text+"</p>")
-//
-// 	}
-// }
-//
-// function goingDown(amount){
-// 	move_text("#text-bucket-styled","#text-bucket-upper",amount)
-// 	move_text("#text-bucket-end","#text-bucket-styled",amount)
-// }
-//
 // function update_bottom(text) {
 // 	var content = $("#text-bucket-end p").first().text()
 // 	if(text.indexOf("\n")>-1){
@@ -166,52 +115,14 @@ var lastBottomPar = "";
 // }
 
 
-//in case performance need
-/**function indexOfRec(paragraph,amount,toFind){
-	function indexOfRec(paragraph,amount,toFind,acc){	
-	if(amount == 0){ 
-		return acc}
-	else {
-		return indexOfRec(paragraph.substring(paragraph.indexOf(toFind)+1),amount-1,toFind,paragraph.indexOf(toFind)+1+acc)
-	}}
-	return indexOfRec(paragraph,amount,toFind,0)
-}**/
+var readerController = new FastReader()
 
-// function indexOfRec(paragraph,amount,toFind){
-// 	return paragraph.split(toFind, amount).join(toFind).length
-// }
-// function lastIndexOfRec(paragraph,amount,toFind){
-// 	var reversed = paragraph.split("").reverse().join("");
-// 	return paragraph.length - indexOfRec(reversed,amount,toFind)
-// }
-// function take_from_paragraph(div,number_words){
-//
-// 	var content = $(div+" p").apply(order).text()
-// 	if(text.indexOf("\n")>-1){
-// 		$(div+ " p").apply(order).remove()
-// 	}else{
-// 		$(div+ " p").apply(order).remove()
-// 		$(div).append("<p>"+content.substring(content.indexOf(text)+text.length)+"</p>")
-// 	}
-// }
-//
-//
-//
-// //not need a function for this
-// function redistribute_paragraph(paragraph,amount,dest1,dest2,dest3){
-// 	dest3(dest2(dest1(paragraph,text)))
-// }
-//
-//
-//
-//
-// var currentPos = 0;
-//
-// function blink(){
-// 	currentPos = build_div(this.currentPos);
-// 	//setTimeout(blink,time_to_read);
-//
-// }
+function blink(){
+		readerController.redistributing_up($("#reader-container"),$("#upper-container"),3)
+		readerController.redistributing_up($("#bottom-container"),$("#reader-container"),3)
+		setTimeout(blink,time_to_read);
+
+}
 //
 // function start_horizontal() {
 // 		setInterval(blink,1000);
@@ -300,11 +211,7 @@ $(document).ready(function() {
 		}
 	  });
 	  
-	  $("#text-bucket").change(function(e) {
-	    //this.text = $("#text-bucket").val();
-		assign_to_bucket($("#text-bucket").val());
-		//build_div();
-	  });
+	 
 	//$("#text-bucket").text(text);
 	apply_width();
 	apply_number_words();
@@ -312,13 +219,10 @@ $(document).ready(function() {
 });
 
 
-function assign_to_bucket(text) {
-	this.text = text;
-}
+
 
 function receivedText() {
 	  //document.getElementById('editor').appendChild(document.createTextNode(fr.result));
-	assign_to_bucket(fr.result);
 	populate_bottom(fr.result)
 	  
 	      }    

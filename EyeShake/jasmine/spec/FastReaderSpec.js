@@ -5,8 +5,8 @@ describe("FastReader", function() {
      reader = new FastReader();
   });
 
-  it("1 should be able to take 3 words from the begining of 'should be able to play a Song', adding a blank ", function() {
-    expect("should be able ").toEqual(reader.take_text("should be able to play a Song",3,true));
+  it("1 should be able to take 3 words from the begining of 'should be able to play a Song'", function() {
+    expect("should be able").toEqual(reader.take_text("should be able to play a Song",3,true));
   });
   
   it("2 should be able to move 3 first words from 'should be able to play a Song' to 'almos nothing',adding it before and keep the rest", function() {
@@ -17,8 +17,8 @@ describe("FastReader", function() {
     expect("almos nothing play a Song").toEqual(reader.move_text("should be able to play a Song","almos nothing",3,false,false));
   });
   
-  it("4 should be able to take 3 words from the end of 'should be able to play a Song',blank included", function() {
-    expect(" play a Song").toEqual(reader.take_text("should be able to play a Song",3,false));
+  it("4 should be able to take 3 words from the end of 'should be able to play a Song'", function() {
+    expect("play a Song").toEqual(reader.take_text("should be able to play a Song",3,false));
   });
   
   it("5 should be able to find index of 3rd blank from the end of 'should be able to play a Song',blank included", function() {
@@ -84,7 +84,7 @@ var html = $('<div class="book">')
 	  var to = $("#text-bucket-styled",html);
 	  reader.redistributing_up(from,to,3)
     expect("Im looking at Something dude was").toEqual(to.text());
-    expect("almost walking...").toEqual(from.text());
+    expect(" almost walking...").toEqual(from.text());
 	
   });
   it("10 should be able to redistribute from bottom to reader and erase bottom paragraph if empty", function() {
