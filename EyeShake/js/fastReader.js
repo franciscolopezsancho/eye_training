@@ -47,12 +47,15 @@ FastReader.prototype.redistributing_up = function (from,to,amount){
 	if(to.children().length == 0 ){
 		if(toUpdated.indexOf("\n")==-1){
 			to.append('<p>'+toUpdated+'</p>')
-		}else{
+		}else if(toUpdated.indexOf("\n")>-1){
 			to.append('<p>'+toUpdated.substring(0,toUpdated.indexOf("\n")+1)+'</p>')					
 			var rest = toUpdated.substring(toUpdated.indexOf("\n")+1)
 			if(rest){
 				to.append('<p>'+rest+'</p>')
 			}
+		}else if(toUpdated.indexOf(".")>-1){
+			to.append('<p>'+toUpdated.substring(0,toUpdated.indexOf(".")+1)+'</p>')					
+			
 		}
 	}else if(toUpdated.indexOf("\n")==-1){		
 		to.children().last().text(toUpdated)
@@ -65,13 +68,40 @@ FastReader.prototype.redistributing_up = function (from,to,amount){
 		}
 	}
 	//create new objects!!!! make it functional
+	this.update_from(from,["\n","."],amount)
 	
-	from.children().first().text(this.delete_text(from.children().first().text(),amount,true))	
+	
+}
+
+FastReader.prototype.find_mark = function(text,marks){
+	var minFoundAt = text.length + 1;
+	for(i in marks){
+		var foundAt = text.indexOf(marks[i])
+		if(foundAt != -1  && foundAt < minFoundAt){
+			minFoundAt = foundAt
+		}
+	}
+	if(minFoundAt < text.length + 1){
+		return minFoundAt
+	}
+}
+
+FastReader.prototype.update_from = function(from,marks,amount){
+	var text = from.children().first().text()
+	var foundMark = this.find_mark(text,marks)
+	if(foundMark < this.indexOfRec(text,amount," ")){
+		from.children().first().text(text.substring(foundMark+1))			
+	}else{
+		from.children().first().text(this.delete_text(text,amount,true))	
+	}
 	if(from.children().first().text() == ""){
 		from.children().first().remove()
 	}
-	
 }
+
+// FastReader.prototype.deal_with_marks_to(to,text){
+//
+// }
 
 FastReader.prototype.redistributing_down = function (from,to,amount){	
 	//create new objects!!!! make it functional	

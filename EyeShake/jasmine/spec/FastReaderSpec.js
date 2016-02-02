@@ -79,16 +79,16 @@ var html = $('<div class="book">')
   });
   
   it("9 should be able to redistribute from bottom with 'Something dude was almost walking...' to reader with 'Im looking at'", function() {
- var html = $('<div class="book">')		
-	  				html.append('<div id="upper-container" class="upper"><p>Something</p></div>')		
- 					html.append('<div id="text-bucket-styled" class="reader"><p>Im looking at </p></div>')	
- 					html.append('<div id="text-bucket-end" class="downer"><p>Something dude was almost walking...</p></div>')	
- 	  				html.append('</div>')
-	  var from = $("#text-bucket-end",html);
-	  var to = $("#text-bucket-styled",html);
-	  reader.redistributing_up(from,to,3)
-    expect("Im looking at Something dude was").toEqual(to.text());
-    expect(" almost walking...").toEqual(from.text());
+ var html = $(		'<div class="book">'+
+ 						'<div id="upper-container" class="upper"><p>Something</p></div>'+
+						'<div id="text-bucket-styled" class="reader"><p>Im looking at </p></div>'+
+						'<div id="text-bucket-end" class="downer"><p>Something dude was almost walking...</p></div>'+
+					'</div>')
+	  var bottom = $("#text-bucket-end",html);
+	  var focus = $("#text-bucket-styled",html);
+	  reader.redistributing_up(bottom,focus,3)
+    expect("Im looking at Something dude was").toEqual(focus.text());
+    expect(" almost walking...").toEqual(bottom.text());
 	
   });
   it("10 should be able to redistribute from bottom to reader and erase bottom paragraph if empty", function() {
@@ -141,7 +141,7 @@ var html = $('<div class="book">')
 					+'</div>')	
  	  				html.append('</div>')
 	  var from = $("#text-bucket-end",html);
-	  var to = $("#text-bucket-end",html);
+	  var to = $("#text-bucket-styled",html);
 	  reader.redistributing_up(from,to,3)
 	  reader.redistributing_up(from,to,3)
 	  reader.redistributing_up(from,to,3)	  
@@ -238,6 +238,59 @@ var html = $('<div class="book">')
 //     expect("Something Im looking \n").toEqual(upper.children().first().text());
 //   	expect("Something dude was").toEqual(upper.children().last().text());
 	
+  });
+  
+  it("15 should be able to redistribute with period in between so doesn't ", function() {
+ 	   var html = $('<div class="book"><div id="upper-container" class="upper"></div>'+
+	   '<div id="text-bucket-styled" class="reader"></div>'+
+	   '<div id="text-bucket-end" class="downer">'+
+	   '<p>La historia fue asi. Cuando se quiso dar cuenta se acabo \n</p></div>'
+	   +'</div>')	
+	  var bottom = $("#text-bucket-end",html);
+	  var readerr = $("#text-bucket-styled",html);
+	  var upper = $("#upper-container",html);	  
+	  
+	  reader.redistributing_up(bottom,readerr,3)	  
+      expect("La historia fue").toEqual(readerr.children().first().text());
+      expect(" asi. Cuando se quiso dar cuenta se acabo \n").toEqual(bottom.children().first().text());
+      
+	   reader.redistributing_up(readerr,upper,3)
+	   expect("La historia fue").toEqual(upper.children().first().text());
+	   expect("").toEqual(readerr.text());
+	   
+ 	  reader.redistributing_up(bottom,readerr,3)	  
+       expect(" asi.").toEqual(readerr.children().first().text());
+       expect(" Cuando se quiso dar cuenta se acabo \n").toEqual(bottom.children().first().text());
+     
+	  
+	  
+	  // reader.redistributing_up(readerr,upper,3)
+// 	  reader.redistributing_up(bottom,readerr,3)
+//
+//     expect("Something Im looking \n").toEqual(upper.children().first().text());
+//   	expect("Something dude was").toEqual(upper.children().last().text());
+	
+  });
+  
+  
+  it("16 should find first index of a mark (like period,carriage,parenthesis,comma)", function() {
+  		expect(12).toEqual(reader.find_mark("era del atun. \n",["\n","."]))
+  
+  
+  });
+  
+  it("17 should be able to redistribute from bottom to reader keeping deleting text from bottom propertly", function() {
+ var html = $('<div class="book">')		
+	  				html.append('<div id="upper-container" class="upper"><p>Something</p></div>')		
+ 					html.append('<div id="text-bucket-styled" class="reader"><p>Im looking \n</p></div>')	
+ 					html.append('<div id="text-bucket-end" class="downer"><p>Was some \n</p>'
+					+'<p>trouble when all of the sudden \n</p>'+
+					+'</div>')	
+ 	  				html.append('</div>')
+	  var from = $("#text-bucket-end",html);
+	  var to = $("#text-bucket-styled",html);
+	  reader.update_from(from,["\n","."],3)	  
+    expect("trouble when all of the sudden \n").toEqual(from.children().first().text());
   });
   
 });
