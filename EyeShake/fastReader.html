@@ -19,6 +19,8 @@
 		<!-- Include all compiled plugins (below), or include individual files as needed -->
 		<script src="js/bootstrap.min.js"></script>
 		<script src="js/fastReader.js"></script>
+		<script src="js/view.js"></script>
+		
 	</head>
 	<body>
 		<form id="main_form" role="form" style="background-color=#F7D358" action="handler.php" method="POST" enctype=multipart/form-data>
@@ -32,10 +34,9 @@
 			<div class="panel ">
 				<div class="book">		
 					<div id="upper-container" class="upper">		
-					<span id="text-bucket-init" class="text-upper"></span>
 					</div>
-					<div id="text-bucket-styled" class="reader"></div>
-					<div id="text-bucket-end" class="downer"></div>
+					<div id="reader-container" class="reader"></div>
+					<div id="bottom-container" class="downer"></div>
 				</div>
 			</div>
 
