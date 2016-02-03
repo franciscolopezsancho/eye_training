@@ -43,7 +43,7 @@ FastReader.prototype.lastIndexOfRec = function(paragraph,amount,toFind){
 }
 FastReader.prototype.redistributing_up = function (from,to,amount){	
 	//create new objects!!!! make it functional
-	var toUpdated = this.move_text(from.children().first().text(),to.children().last().text(),amount,true,false)	
+	var text = this.take_text(from.children().first().text(),amount,true)	
 	// if(to.children().length == 0 ){
 	// 	if(toUpdated.indexOf("\n")==-1){
 	// 		to.append('<p>'+toUpdated+'</p>')
@@ -67,9 +67,9 @@ FastReader.prototype.redistributing_up = function (from,to,amount){
 	// 		to.append('<p>'+rest+'</p>')
 	// 	}
 	// }
-	this.update_to(to,toUpdated,["\n","."])
+	this.update_to(to,text,["\n","."," (",") ",","])
 	//create new objects!!!! make it functional
-	this.update_from(from,["\n","."],amount)
+	this.update_from(from,["\n","."," (",") ",","],amount)
 	
 	
 
@@ -79,7 +79,7 @@ FastReader.prototype.update_to = function(to,text,marks){
 	if(to.children().length == 0 ){
 		to.append('<p>'+this.substring_with_mark(text,minIndex)+'</p>')		
 	}else{
-		to.children().last().text(this.substring_with_mark(text,minIndex))				
+		to.children().last().text(to.children().last().text()+this.substring_with_mark(text,minIndex))				
 	}
 	if(to.children().last().text().indexOf("\n")>-1){
 		to.append('<p></p>')

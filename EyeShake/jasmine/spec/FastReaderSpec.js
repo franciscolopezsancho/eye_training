@@ -219,7 +219,8 @@ var html = $('<div class="book">')
       expect(2).toEqual(bottom.children().length);
 	  //next blink	  
 	  reader.redistributing_up(readerr,upper,3)
-      expect("La historia del arte es una.").toEqual(upper.children().last().text());
+      expect("La historia del arte es una. \n").toEqual(upper.children().first().text());
+      expect("").toEqual(upper.children().last().text());
       expect(1).toEqual(readerr.children().length);
 	  
 	  //next blink	  
@@ -228,7 +229,10 @@ var html = $('<div class="book">')
       expect(" actividad o producto realizado . \n").toEqual(bottom.children().first().text());
       expect(2).toEqual(bottom.children().length);
 	  
-	  
+	  //next blink	  
+	  reader.redistributing_up(readerr,upper,3)
+      expect("Entendido como cualquier").toEqual(upper.children().last().text());
+      expect(0).toEqual(readerr.children().length);
      
 	  
 	  
@@ -272,12 +276,66 @@ var html = $('<div class="book">')
 	
   });
   
-  
+  it("15.1 should be able to redistribute with comma in between so doesn't ", function() {
+ 	   var html = $('<div class="book"><div id="upper-container" class="upper"></div>'+
+	   '<div id="text-bucket-styled" class="reader"></div>'+
+	   '<div id="text-bucket-end" class="downer">'+
+	   '<p>La historia fue asi, Cuando se quiso dar cuenta se acabo \n</p></div>'
+	   +'</div>')	
+	  var bottom = $("#text-bucket-end",html);
+	  var readerr = $("#text-bucket-styled",html);
+	  var upper = $("#upper-container",html);	  
+	  
+	  reader.redistributing_up(bottom,readerr,3)	  
+      expect("La historia fue").toEqual(readerr.children().first().text());
+      expect(" asi, Cuando se quiso dar cuenta se acabo \n").toEqual(bottom.children().first().text());
+      
+	   reader.redistributing_up(readerr,upper,3)
+	   expect("La historia fue").toEqual(upper.children().first().text());
+	   expect("").toEqual(readerr.text());
+	   
+ 	  reader.redistributing_up(bottom,readerr,3)	  
+       expect(" asi,").toEqual(readerr.children().first().text());
+       expect(" Cuando se quiso dar cuenta se acabo \n").toEqual(bottom.children().first().text());
+	
+  });
+
+ it("15.2 should be able to redistribute with parenthesis in between so doesn't ", function() {
+ 	   var html = $('<div class="book"><div id="upper-container" class="upper"></div>'+
+	   '<div id="text-bucket-styled" class="reader"></div>'+
+	   '<div id="text-bucket-end" class="downer">'+
+	   '<p>La historia fue asi (Cuando se quiso dar cuenta) se acabo \n</p></div>'
+	   +'</div>')	
+	  var bottom = $("#text-bucket-end",html);
+	  var readerr = $("#text-bucket-styled",html);
+	  var upper = $("#upper-container",html);	  
+	  
+	  reader.redistributing_up(bottom,readerr,3)	  
+      expect("La historia fue").toEqual(readerr.children().first().text());
+      expect(" asi (Cuando se quiso dar cuenta) se acabo \n").toEqual(bottom.children().first().text());
+      
+	   reader.redistributing_up(readerr,upper,3)
+	   expect("La historia fue").toEqual(upper.children().first().text());
+	   expect("").toEqual(readerr.text());
+	   
+ 	  reader.redistributing_up(bottom,readerr,3)	  
+       expect(" asi ").toEqual(readerr.children().first().text());
+       expect("(Cuando se quiso dar cuenta) se acabo \n").toEqual(bottom.children().first().text());
+	
+  });
+
   it("16 should find first index of a mark (like period,carriage,parenthesis,comma)", function() {
   		expect(12).toEqual(reader.find_mark("era del atun. \n",["\n","."]))
   
   
   });
+
+it("16.1 should find first index of a mark (like period,carriage,parenthesis,comma)", function() {
+  		expect(12).toEqual(reader.find_mark("era del atun. \n",["\n","."]))
+  
+  
+  });
+
  
 it("17 should leave the same when don't find any mark (like period,carriage,parenthesis,comma)", function() {
   		var text = "era del aturn"
