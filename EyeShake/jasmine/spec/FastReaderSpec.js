@@ -219,8 +219,8 @@ var html = $('<div class="book">')
       expect(2).toEqual(bottom.children().length);
 	  //next blink	  
 	  reader.redistributing_up(readerr,upper,3)
-      expect("La historia del arte es una. \n").toEqual(upper.children().last().text());
-      expect(0).toEqual(readerr.children().length);
+      expect("La historia del arte es una.").toEqual(upper.children().last().text());
+      expect(1).toEqual(readerr.children().length);
 	  
 	  //next blink	  
 	  reader.redistributing_up(bottom,readerr,3)
@@ -278,8 +278,14 @@ var html = $('<div class="book">')
   
   
   });
+ 
+it("17 should leave the same when don't find any mark (like period,carriage,parenthesis,comma)", function() {
+  		var text = "era del aturn"
+ 		expect(text).toEqual(text.substring(reader.find_mark(text,["\n","."]))) 
   
-  it("17 should be able to redistribute from bottom to reader keeping deleting text from bottom propertly", function() {
+  });
+
+  it("18 should be able to redistribute from bottom to reader keeping deleting text from bottom propertly", function() {
  var html = $('<div class="book">')		
 	  				html.append('<div id="upper-container" class="upper"><p>Something</p></div>')		
  					html.append('<div id="text-bucket-styled" class="reader"><p>Im looking \n</p></div>')	

@@ -44,33 +44,46 @@ FastReader.prototype.lastIndexOfRec = function(paragraph,amount,toFind){
 FastReader.prototype.redistributing_up = function (from,to,amount){	
 	//create new objects!!!! make it functional
 	var toUpdated = this.move_text(from.children().first().text(),to.children().last().text(),amount,true,false)	
-	if(to.children().length == 0 ){
-		if(toUpdated.indexOf("\n")==-1){
-			to.append('<p>'+toUpdated+'</p>')
-		}else if(toUpdated.indexOf("\n")>-1){
-			to.append('<p>'+toUpdated.substring(0,toUpdated.indexOf("\n")+1)+'</p>')					
-			var rest = toUpdated.substring(toUpdated.indexOf("\n")+1)
-			if(rest){
-				to.append('<p>'+rest+'</p>')
-			}
-		}else if(toUpdated.indexOf(".")>-1){
-			to.append('<p>'+toUpdated.substring(0,toUpdated.indexOf(".")+1)+'</p>')					
+	// if(to.children().length == 0 ){
+	// 	if(toUpdated.indexOf("\n")==-1){
+	// 		to.append('<p>'+toUpdated+'</p>')
+	// 	}else if(toUpdated.indexOf("\n")>-1){
+	// 		to.append('<p>'+toUpdated.substring(0,toUpdated.indexOf("\n")+1)+'</p>')					
+	// 		var rest = toUpdated.substring(toUpdated.indexOf("\n")+1)
+	// 		if(rest){
+	// 			to.append('<p>'+rest+'</p>')
+	// 		}
+	// 	}else if(toUpdated.indexOf(".")>-1){
+	// 		to.append('<p>'+toUpdated.substring(0,toUpdated.indexOf(".")+1)+'</p>')					
 			
-		}
-	}else if(toUpdated.indexOf("\n")==-1){		
-		to.children().last().text(toUpdated)
-	}else{
-		//contains carriage
-		to.children().last().text(toUpdated.substring(0,toUpdated.indexOf("\n")+1))		
-		var rest = toUpdated.substring(toUpdated.indexOf("\n")+1)
-		if(rest){
-			to.append('<p>'+rest+'</p>')
-		}
-	}
+	// 	}
+	// }else if(toUpdated.indexOf("\n")==-1){		
+	// 	to.children().last().text(toUpdated)
+	// }else{
+	// 	//contains carriage
+	// 	to.children().last().text(toUpdated.substring(0,toUpdated.indexOf("\n")+1))		
+	// 	var rest = toUpdated.substring(toUpdated.indexOf("\n")+1)
+	// 	if(rest){
+	// 		to.append('<p>'+rest+'</p>')
+	// 	}
+	// }
+	this.update_to(to,toUpdated,["\n","."])
 	//create new objects!!!! make it functional
 	this.update_from(from,["\n","."],amount)
 	
 	
+
+}
+FastReader.prototype.update_to = function(to,text,marks){
+	var minIndex = this.find_mark(text,marks)
+	if(to.children().length == 0 ){
+		to.append('<p>'+this.substring_with_mark(text,minIndex)+'</p>')		
+	}else{
+		to.children().last().text(this.substring_with_mark(text,minIndex))				
+	}
+	if(to.children().last().text().indexOf("\n")>-1){
+		to.append('<p></p>')
+	}
 }
 
 FastReader.prototype.find_mark = function(text,marks){
@@ -85,6 +98,15 @@ FastReader.prototype.find_mark = function(text,marks){
 		return minFoundAt
 	}
 }
+
+FastReader.prototype.substring_with_mark = function(text,markIndex){
+	if(markIndex > -1){
+		return text.substring(0,markIndex+1)
+	}else{
+		return text
+	}
+}
+
 
 FastReader.prototype.update_from = function(from,marks,amount){
 	var text = from.children().first().text()
