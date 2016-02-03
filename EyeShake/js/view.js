@@ -1,12 +1,9 @@
+$.getScript("js/fastReader.js", function(){
 
+   alert("Script loaded but not necessarily executed.");
 
+});  
 
-requirejs(["js/fastReader"], function(fastReader) {
-    //This fnction is called when scripts/helper/util.js is loaded.
-    //If util.js calls define(), then this function is not fired until
-    //util's dependencies have loaded, and the util argument will hold
-    //the module value for "helper/util".
-});
 
 
 var items = ['Im very happy'];
@@ -125,6 +122,12 @@ function populate_bottom(text) {
 // 	}
 // }
 
+
+$.getScript("fastReader.js", function(){
+
+   alert("Script loaded but not necessarily executed.");
+
+});  
 
 var readerController = new FastReader()
 
@@ -249,6 +252,8 @@ function receivedText() {
 var form = document.getElementById('main_form');
 var fileSelect = document.getElementById('file-select');
 var uploadButton = document.getElementById('upload-button');
+
+
 
 
 
