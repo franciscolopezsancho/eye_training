@@ -43,7 +43,7 @@ FastReader.prototype.lastIndexOfRec = function(paragraph,amount,toFind){
 }
 FastReader.prototype.redistributing_up = function (from,to,amount){	
 	//create new objects!!!! make it functional
-	var text = this.take_text(from.children().first().text(),amount,true)	
+	var text = this.take_text(from.text(),amount,true)	
 	// if(to.children().length == 0 ){
 	// 	if(toUpdated.indexOf("\n")==-1){
 	// 		to.append('<p>'+toUpdated+'</p>')
@@ -91,12 +91,29 @@ FastReader.prototype.find_mark = function(text,marks){
 	for(i in marks){
 		var foundAt = text.indexOf(marks[i])
 		if(foundAt != -1  && foundAt < minFoundAt){
-			minFoundAt = foundAt
+			if(!this.isAcronym(text,foundAt) && !this.isDigit(text,foundAt)){
+				minFoundAt = foundAt				
+			}
 		}
 	}
 	if(minFoundAt < text.length + 1){
 		return minFoundAt
 	}
+}
+
+FastReader.prototype.isAcronym = function(text,index){
+	if(text.charAt(index) == "."){
+		if(index == 1) return true
+		if(text.charAt(index - 2) == " ") return true
+	}
+	return false
+}
+
+FastReader.prototype.isDigit = function(text,index){
+	if(text.charAt(index) == "."){
+		if($.isNumeric(text.charAt(index + 1)) && $.isNumeric(text.charAt(index -1))) return true
+	}
+	return false
 }
 
 FastReader.prototype.substring_with_mark = function(text,markIndex){

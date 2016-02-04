@@ -1,20 +1,54 @@
+
+
+function View() {
+}
+
+View.prototype.redistribute = function (text,lines){
+	//expects an array lines.length with strings
+	//with best distribution
+	function redistribute_acc(text,lines,acc){	
+		if(lines == 1){
+			acc.push(text)
+			return acc
+		}else{
+			var mod = text.length/lines	
+			var firstPiece = text.substring(0,mod)
+			var secondPiece = text.substring(mod)
+			
+			var quickestBlankBefore =firstPiece.lastIndexOf(" ")	+1
+			var quickestBlankAfter = secondPiece.indexOf(" ")
+			var absolutQuickest = 0
+			if(mod - quickestBlankBefore > quickestBlankAfter){
+				absolutQuickest = quickestBlankAfter + mod 
+			}else {
+				absolutQuickest = quickestBlankBefore
+			}
+			acc.push(text.substring(0,absolutQuickest))
+			return redistribute_acc(text.substring(absolutQuickest),lines-1,acc)
+		}
+	}	
+	return redistribute_acc(text,lines,new Array())
+}
+
 $.getScript("js/fastReader.js", function(){
 
-   alert("Script loaded but not necessarily executed.");
 
 });  
 
-
-
 var items = ['Im very happy'];
 var width = 600;
-var time_to_read = 300;
+var time_to_read = 200;
 var text = 'In the twelfth and thirteenth centuries, the Jurchen Jin Dynasty (1115–1234) waged a series of military campaigns against the Chinese Song Dynasty (960–1279). In 1115, the Jurchens rebelled against their overlords, the Khitans of the Liao Dynasty (907–1125), and declared the formation of the Jin. Allying with the Song against their common enemy the Liao, the Jin promised to return to the Song the territories in northern China that had fallen under Liao control since 938. The Jurchens quick defeat of the Liao combined with Song military failures made the Jin reluctant to cede these territories. After a series of failed negotiations that embittered both sides, the Jurchens attacked the Song in November 1125, dispatching one army towards Taiyuan and the other towards Kaifeng, the Song capital. Surprised by the news of an invasion, the Song general stationed in Taiyuan retreated from the city, which was besieged and later captured. As the second Jin army approached the capital, Emperor Huizong of the Song abdicated and fled south. A new emperor, Qinzong, was enthroned. The Jurchens began a siege against Kaifeng in 1126, but Qinzong negotiated for their retreat from the capital after he agreed to pay a large annual indemnity. Qinzong reneged on the deal and ordered Song forces to defend the prefectures instead of fortifying the capital. The Jin resumed their war against the Song and again besieged Kaifeng in 1127. The Chinese emperor was captured in an event known as the Jingkang Incident, the capital was looted, and the Song lost northern China to the Jin. Remnants of the Song retreated to southern China and, after brief stays in several temporary capitals, eventually relocated to Hangzhou. The retreat of the Song court marked the end of the Northern Song era and the beginning of the Southern Song.'
 //var text = 'Lorem ipsum dolor draw attention sit amet, consectetuer adipiscing elit. Nam nibh. Nunc varius facilisis eros';
 var number_words = 3;
 var words_to_watch;
 var response;
 var min_total_letters_factor = 4;
+var averageLength = 6
+var numWords = 4
+var maxLength = averageLength*numWords
+
+
 
 
 
@@ -44,15 +78,12 @@ function apply_number_words(){
 }
 
 function apply_width(){
-	$("#reader").css("width",this.width)
-	
-	
-	
+	$("#reader").css("width",this.width)	
 }
 
 
 function add_width(){
-modify_width(50)
+	modify_width(50)
 }
 
 function shrink_width(){
@@ -61,121 +92,97 @@ function shrink_width(){
 
 var lastTopPar = "";
 var lastBottomPar = "";
-
-
-// function build_div(pos){
-// 	var words = get_words(text,number_words,pos);
-// 	words_to_watch = print_words(words[0]);
-// 	var index = text.indexOf(words_to_watch)
-// 	//$("#text").text(words_to_watch);
-// 	lastTopPar = append_p_to_div(this.text.substring(index,  index + words_to_watch.length),"#upper-container",lastTopPar,true)
-// 	printPart(this.text,0,index,"text-bucket-init")
-// 	printPart(this.text,index,index + words_to_watch.length,"text-bucket-styled")
-// 	update_bottom(words_to_watch)
-// 	return words[1];
-// }
-//
-// function build_div2(paragraphId,number_words){
-//
-// }
-//
-// function append_p_to_div(words,div,lastPar,up){
-// 	if(words.indexOf("\n")>-1){
-// 		$(div).append("<p>"+lastPar + words.substring(0,words.indexOf("\n"))+"</p>")
-// 		var dif = $(div)
-// 		if(up){dif.scrollTop(dif[0].scrollHeight)}else{};
-// 		return words.substring(words.indexOf("\n"),words.length)
-// 	}
-// 	return lastPar + words
-// }
-//
 function populate_bottom(text) {
 	$.each(text.split("\n"),function( index,paragraph ) {
 		$("#bottom-container").append("<p>"+paragraph+"\n"+"</p>")
 	})
 }
-// function build_paragraph(text,div,order){
-// 	var content = $(div+" p").apply(order).text()
-// 	if(text.indexOf("\n")>-1){
-// 		$(div+ " p").apply(order).remove()
-// 	}else{
-// 		$(div+ " p").apply(order).remove()
-// 		$(div).append("<p>"+content.substring(content.indexOf(text)+text.length)+"</p>")
-// 	}
-// }
 
-
-
-
-//make blink reader on punto
-//make blink upper on punto y aparte
-
-
-// function update_bottom(text) {
-// 	var content = $("#text-bucket-end p").first().text()
-// 	if(text.indexOf("\n")>-1){
-// 		$("#text-bucket-end p").first().remove()
-//
-// 	}else{
-// 		$("#text-bucket-end p").first().remove()
-// 		$("#text-bucket-end").prepend("<p>"+content.substring(content.indexOf(text)+text.length)+"</p>")
-// 	}
-// }
 
 
 $.getScript("fastReader.js", function(){
-
-   alert("Script loaded but not necessarily executed.");
-
 });  
 
 var readerController = new FastReader()
 
+var viewAke = new View()
+
+
+function pickNumWords(from,amount){
+	if(from.children().first().text().length == 0) return amount
+	var allWords = readerController.take_text(from.children().first().text(),amount,true)
+	if(allWords.length > maxLength){
+		return pickNumWords(from,amount-1)
+	}else{
+		return amount
+	}
+}
+
+
+
 function blink(){
-		readerController.redistributing_up($("#bottom-container"),$("#reader-container"),3)	
-		setTimeout(reader2Upper,time_to_read);
+		var amount = pickNumWords($("#bottom-container"),numWords)
+		readerController.redistributing_up($("#bottom-container"),$("#reader-container"),amount)	
+		var paragraphs = viewAke.redistribute($("#reader-container").text(),2)
+		$("#reader-container").children().remove()
+		$("#reader-container").append("<p>"+paragraphs[0]+"</p>")
+		$("#reader-container").append("<p>"+paragraphs[1]+'</p>')
+		
+		//addMark()
+		var readerText = $("#reader-container").text()
+		if(readerText.indexOf(".")>-1){
+			setTimeout(function() {reader2Upper(amount)},time_to_read*2);
+		}
+		else if(readerText.indexOf(".")>-1){
+			setTimeout(function() {reader2Upper(amount)},time_to_read*3);
+		}else {
+			setTimeout(function() {reader2Upper(amount)},time_to_read);
+		}
 
 }
 
-function reader2Upper(){
-	readerController.redistributing_up($("#reader-container"),$("#upper-container"),3)
+function reader2Upper(amount){
+	var paragraphsText = $("#reader-container").text()
+	$("#reader-container").children().remove()
+	$("#reader-container").append("<p>"+paragraphsText+"</p>")
+
+
+	readerController.redistributing_up($("#reader-container"),$("#upper-container"),amount)
 	var dif = $("#upper-container")
 	dif.scrollTop(dif[0].scrollHeight)
     blink();	
 
 }
-//
-// function start_horizontal() {
-// 		setInterval(blink,1000);
-// }
-//
-// function get_words(text,number_words,pos){
-// 	var words =  text.split(' ');
-// 	var chunk = new Array();
-// 	var words_sin = 0;
-// 	for(var i=0;words_sin<number_words;i++){
-// 		chunk[i] = words[pos+i];
-// 		words_sin = words_sin + 1
-//
-// 	}
-// 	return [chunk,pos+chunk.length];
-// }
-//
-// function printPart(initText,from,to,where){
-// 	$("#"+where).text(initText.substring(from,to))
-// }
-//
-//
-//
-//
-// function print_words(words){
-// 	var to_print = '';
-// 	for(var i=0;i<words.length;i++){
-// 		to_print = to_print + words[i]+' '
-// 	}
-// 	return to_print;
-// }
 
+function addMark(){
+	var text = $("#reader-container").text()
+	addPeriodMark(text)
+	addParagraphMark(text)
+	
+}
+
+function addPeriodMark(text){
+	if(text.indexOf(".") != -1){
+		$("#period").prepend('<span id="dot" class="period">'+".."+"</span>");
+	}
+	setTimeout(cleanPeriodMark,150)
+	
+}
+function addParagraphMark(text){
+	if(text.indexOf("\n") != -1){
+		$("#paragraph").append('<span id="paragraphMark" class="paragraph">'+".."+"</span>");
+	}
+	setTimeout(cleanParagraphMark,150)
+	
+}
+
+function cleanPeriodMark(){
+	$("#dot").remove();
+}
+
+function cleanParagraphMark(){
+	$("#paragraphMark").remove();
+}
 
 
 

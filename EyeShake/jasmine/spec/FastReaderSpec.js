@@ -336,6 +336,23 @@ it("16.1 should find first index of a mark (like period,carriage,parenthesis,com
   
   });
 
+  it("16.2 should find that one letter and one dot is not a stop mark", function() {
+    		expect(true).toEqual(reader.isAcronym("d a. C.)",3))
+  
+  
+    });
+	
+    it("16.3 should find that one letter and one dot is not a stop mark", function() {
+      		expect(true).toEqual(reader.isAcronym("d a. C.)",6))
+  
+  
+      });
+
+  it("16.4 should find that one letter and one dot is not a stop mark", function() {
+    		expect("(3000-1000 a. C.)").toEqual(reader.substring_with_mark("(3000-1000 a. C.)",reader.find_mark("(3000-1000 a. C.)",["\n","."])))
+  
+  
+    });
  
 it("17 should leave the same when don't find any mark (like period,carriage,parenthesis,comma)", function() {
   		var text = "era del aturn"
@@ -356,5 +373,9 @@ it("17 should leave the same when don't find any mark (like period,carriage,pare
 	  reader.update_from(from,["\n","."],3)	  
     expect("trouble when all of the sudden \n").toEqual(from.children().first().text());
   });
+  
+  
+  
+  
   
 });
