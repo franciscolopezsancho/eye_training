@@ -30,6 +30,10 @@ describe("View", function() {
     expect([" en ","general,"]).toEqual(view.redistribute(" en general,",2));
   }); 
   
+  it("7 should be able to create 2 string of similar length", function() {
+     expect(["La historia"," del arte"]).toEqual(view.redistribute("La historia del arte",2));
+   }); 
+  
   
   
   

@@ -54,8 +54,9 @@ var words_to_watch;
 var response;
 var min_total_letters_factor = 4;
 var averageLength = 6
-var numWords = 4
+var numWords = 6
 var maxLength = averageLength*numWords
+var numLines = 2
 
 
 
@@ -136,7 +137,6 @@ function blink(){
 		$("#reader-container").children().remove()
 		$("#reader-container").append("<p>"+paragraphs[0]+"</p>")
 		$("#reader-container").append("<p>"+paragraphs[1]+'</p>')
-					addMark()
 
 		var readerText = $("#reader-container").text()
 		if(readerText.indexOf(".")>-1){
@@ -155,9 +155,10 @@ function reader2Upper(amount){
 	var paragraphsText = $("#reader-container").text()
 	$("#reader-container").children().remove()
 	$("#reader-container").append("<p>"+paragraphsText+"</p>")
-
-
 	readerController.redistributing_up($("#reader-container"),$("#upper-container"),amount)
+	//because redistributing creates an empty <p>
+	//we look for the previous one
+	addParagraphMark($("#upper-container"))
 	var dif = $("#upper-container")
 	dif.scrollTop(dif[0].scrollHeight)
     blink();	
@@ -177,11 +178,16 @@ function addPeriodMark(text){
 	setTimeout(cleanPeriodMark,150)
 	
 }
-function addParagraphMark(text){
-	if(text.indexOf("\n") != -1){
-		$("#paragraph").append('<span id="paragraphMark" class="paragraph">'+".."+"</span>");
+function addParagraphMark(to){
+var penultimate = to.children()[to.children().length-2]
+	if(penultimate){
+		if($(penultimate).text().indexOf("\n") != -1){
+			//$("#paragraph").append('<span id="paragraphMark" class="paragraph">'+".."+"</span>");
+			$(penultimate).addClass('upper-last-child')
+		
+		}
+		//setTimeout(function(){cleanParagraphMark(penultimate)},1000)
 	}
-	setTimeout(cleanParagraphMark,150)
 	
 }
 
@@ -190,7 +196,9 @@ function cleanPeriodMark(){
 }
 
 function cleanParagraphMark(){
-	$("#paragraphMark").remove();
+	//$("#paragraphMark").remove();
+	$(penultimate).removeClass('upper-last-child')
+	
 }
 
 
@@ -248,6 +256,9 @@ $(document).ready(function() {
 		}
 	  });
 	  
+	$.get("articuloHistoriaArteWiki.txt", function( data ) {
+  populate_bottom( data );
+});
 	 
 	//$("#text-bucket").text(text);
 	apply_width();
@@ -268,8 +279,6 @@ function receivedText() {
 var form = document.getElementById('main_form');
 var fileSelect = document.getElementById('file-select');
 var uploadButton = document.getElementById('upload-button');
-
-
 
 
 

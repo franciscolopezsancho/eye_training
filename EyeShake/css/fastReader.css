@@ -17,7 +17,6 @@
 
 .book {
   	height:1200px;
-  	position:relative;
 	margin-left: 30%;
 	margin-right: 30%;
 
@@ -27,44 +26,53 @@
 }
 
 .upper {
-	position: relative;
 	top:0px;
 	height:400px;
-	width:800px;
 	overflow-y:scroll;
-	color:#888888;
+	color:#44;
+	width:100%;
+}
+.upper-last-child {
+	background-color: black;
+	-webkit-animation-name: example; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 0.5s;
 }
 
-.text-upper {
-	position: absolute;
-	bottom:0px;
-	overflow-y:scroll;
-	height:20px;
-	
-	
+/* Standard syntax */
+@keyframes example {
+    from {background-color: #444444;}
+    to {background-color: black;}
 }
-.truki {
-	position: absolute;
-	top:400px;
-	height:50px;
-	width:300px;
-	color:#FFF;
+
+#marker {
+	margin-top:40px;
+	color:#DDD;
+	margin-bottom:40px;
+}
+
+#marker td{
+	width:30%;
 }
 
 #reader-container.reader p{
 	width:300px;
 	text-align:center;
+	margin:0px;
+	
+	
 }
 
 
 
+
+
 .downer {
-	position: absolute;
 	top:450px;
 	height:400px;
-	width:800px;
 	overflow:scroll;
-	color:#888888;
+	color:#44;
+	width:100%;
+	
 }
 .loader {
 	float: bottom;
