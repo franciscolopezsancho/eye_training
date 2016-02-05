@@ -1,12 +1,25 @@
+#main_form {
+	background-color: black;	
+}
 
+.panel {
+		background-color: black;	
+}
+
+.panel.panel-default div{
+		background-color: black;	
+}
 
 .panel div {
-	margin-left: 200px;
-	margin-right: 200px;
+	
+	background-color: black;	
 }
 
 .book {
-  position:relative;
+  	height:1200px;
+  	position:relative;
+	margin-left: 30%;
+	margin-right: 30%;
 
 }
 .transparent {
@@ -19,8 +32,7 @@
 	height:400px;
 	width:800px;
 	overflow-y:scroll;
-	
-	color:#E3E7E7;
+	color:#888888;
 }
 
 .text-upper {
@@ -36,6 +48,7 @@
 	top:400px;
 	height:50px;
 	width:300px;
+	color:#FFF;
 }
 
 #reader-container.reader p{
@@ -51,18 +64,17 @@
 	height:400px;
 	width:800px;
 	overflow:scroll;
-	
-	color:#A3E7E7;
+	color:#888888;
 }
-
+.loader {
+	float: bottom;
+}
 .panel button.play  {
 	margin-left: 200px;
 	margin-right: 200px;
 }
 
-textarea.text-background {
-	z-index=100;
-}
+
 
 .period {
 	background-color:red;

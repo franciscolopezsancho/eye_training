@@ -15,13 +15,22 @@ View.prototype.redistribute = function (text,lines){
 			var firstPiece = text.substring(0,mod)
 			var secondPiece = text.substring(mod)
 			
-			var quickestBlankBefore =firstPiece.lastIndexOf(" ")	+1
+			var quickestBlankBefore =firstPiece.lastIndexOf(" ")+1	
 			var quickestBlankAfter = secondPiece.indexOf(" ")
 			var absolutQuickest = 0
-			if(mod - quickestBlankBefore > quickestBlankAfter){
-				absolutQuickest = quickestBlankAfter + mod 
-			}else {
+			if(quickestBlankBefore == -1 && quickestBlankAfter != -1){
+				absolutQuickest = quickestBlankAfter
+			}else if(quickestBlankBefore != -1 && quickestBlankAfter == -1){
 				absolutQuickest = quickestBlankBefore
+			}else if(quickestBlankBefore == -1 && quickestBlankAfter == -1){
+				absolutQuickest = quickestBlankBefore
+				return acc.push(text)
+			}else if(mod - quickestBlankBefore > quickestBlankAfter){
+				absolutQuickest = quickestBlankAfter + mod 
+			}else if(mod - quickestBlankBefore <= quickestBlankAfter){
+				absolutQuickest = quickestBlankBefore
+			}else{
+				throw "None of the cases to redistribute reached. Not set what to do"
 			}
 			acc.push(text.substring(0,absolutQuickest))
 			return redistribute_acc(text.substring(absolutQuickest),lines-1,acc)
@@ -127,8 +136,8 @@ function blink(){
 		$("#reader-container").children().remove()
 		$("#reader-container").append("<p>"+paragraphs[0]+"</p>")
 		$("#reader-container").append("<p>"+paragraphs[1]+'</p>')
-		
-		//addMark()
+					addMark()
+
 		var readerText = $("#reader-container").text()
 		if(readerText.indexOf(".")>-1){
 			setTimeout(function() {reader2Upper(amount)},time_to_read*2);
@@ -142,6 +151,7 @@ function blink(){
 }
 
 function reader2Upper(amount){
+
 	var paragraphsText = $("#reader-container").text()
 	$("#reader-container").children().remove()
 	$("#reader-container").append("<p>"+paragraphsText+"</p>")
@@ -156,7 +166,6 @@ function reader2Upper(amount){
 
 function addMark(){
 	var text = $("#reader-container").text()
-	addPeriodMark(text)
 	addParagraphMark(text)
 	
 }

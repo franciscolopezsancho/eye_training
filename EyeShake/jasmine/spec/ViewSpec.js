@@ -26,7 +26,9 @@ describe("View", function() {
     expect(["En la prehistoria"," surgieron las"]).toEqual(view.redistribute("En la prehistoria surgieron las",2));
   });
   
-  
+ it("6 should be able to create 2 string of similar length", function() {
+    expect([" en ","general,"]).toEqual(view.redistribute(" en general,",2));
+  }); 
   
   
   
