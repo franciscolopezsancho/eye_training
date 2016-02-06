@@ -68,24 +68,31 @@ FastReader.prototype.update_to = function(to,text,marks,down){
 	if(to.children().length == 0 ){
 		to.append('<p>'+this.substring_with_mark(text,minIndex)+'</p>') 
 		}else{
-		// if(down){
-// 		child.text(this.substring_with_mark(text,minIndex)+child.text())
-// 		}else{
-// 		child.text(child.text()+this.substring_with_mark(text,minIndex))
-//
-// 		}
-// 	}
-// 	if(down){
-// 		to.prepend('<p>'+text+'</p>')
-//
-// 	}else{
-		to.children().last().text(to.children().last().text()+this.substring_with_mark(text,minIndex))
+		if(down){
+		child.text(this.substring_with_mark(text,minIndex)+child.text())
+	   
+		}else{
 	    
+		child.text(child.text()+this.substring_with_mark(text,minIndex))
+	    
+		}
+
 	 }
 	 
-    if(to.children().last().text().indexOf("\n")>-1){
-   -               to.append('<p></p>')
+	if(down){
+    if(to.children().first().text().indexOf("\n")>-1){
+                 to.prepend('<p></p>')
 		}	
+	}else{
+    
+    if(to.children().last().text().indexOf("\n")>-1){
+                 to.append('<p></p>')
+		}	
+	}
+	 
+    // if(to.children().last().text().indexOf("\n")>-1){
+ //   -               to.append('<p></p>')
+ // 		}	
 }
 
 FastReader.prototype.update_from = function(from,marks,amount,down){
@@ -96,7 +103,7 @@ FastReader.prototype.update_from = function(from,marks,amount,down){
 	if(foundMark < this.indexOfRec(text,amount," ")){
 		child.text(text.substring(foundMark+1))			
 	}else{
-		child.text(this.delete_text(text,amount,true))	
+		child.text(this.delete_text(text,amount,!down))	
 	}
 	if(child.text() == ""){
 		child.remove()

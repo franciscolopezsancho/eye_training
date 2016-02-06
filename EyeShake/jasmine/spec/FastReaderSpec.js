@@ -111,11 +111,11 @@ var html = $('<div class="book">')
  					html.append('<div id="text-bucket-styled" class="reader"><p>Im looking at </p></div>')	
  					html.append('<div id="text-bucket-end" class="downer"><p>Something dude was </p></div>')	
  	  				html.append('</div>')
-	  var from = $("#text-bucket-styled",html);
-	  var to = $("#text-bucket-end",html);
-	  reader.redistributing_down(from,to,3)
-    expect("Im looking at Something dude was ").toEqual(to.text());
-    expect(0).toEqual(from.children().length);
+	  var focus = $("#text-bucket-styled",html);
+	  var bottom = $("#text-bucket-end",html);
+	  reader.redistributing_down(focus,bottom,3)
+    expect("Im looking at Something dude was ").toEqual(bottom.text());
+    expect(0).toEqual(focus.children().length);
 	
   });
 
@@ -375,7 +375,7 @@ it("17 should leave the same when don't find any mark (like period,carriage,pare
   });
   
   
-  it("19 should be able to redistribute down multiple times", function() {
+  it("19 should be able to redistribute up and down multiple times", function() {
  	   var html = $('<div class="book"><div id="upper-container" class="upper">'+
 	   '</div><div id="text-bucket-styled" class="reader"></div>'+
 	   '<div id="text-bucket-end" class="downer">'+
@@ -406,8 +406,9 @@ it("17 should leave the same when don't find any mark (like period,carriage,pare
       expect(0).toEqual(upper.children().length);	
 	 
 	  reader.redistributing_down(readerr,bottom,3)
-      expect("La historia del arte es una. \n").toEqual(bottom.children().first().text());	
+      expect("La historia del arte es una. \n").toEqual(bottom.children().eq(1).text());	
       expect(0).toEqual(readerr.children().length);	
+	  
 	  
 	  
 	
@@ -430,15 +431,20 @@ it("17 should leave the same when don't find any mark (like period,carriage,pare
       expect("tiempo el arte se ha clasificado de \n").toEqual(readerr.children().first().text());
       expect("A lo largo del ").toEqual(upper.children().last().text());
       expect(3).toEqual(upper.children().length);
+	  //it suppossed to have 2 because text contains carriage
+      expect(2).toEqual(readerr.children().length);
+	  
 	  
 	  
 	  reader.redistributing_down(readerr,bottom,8)
       expect("tiempo el arte se ha clasificado de \n").toEqual(bottom.children().first().text());
-      expect(0).toEqual(readerr.children().length);
+      expect(1).toEqual(readerr.children().length);
 	  
 	  reader.redistributing_down(upper,readerr,8)
       expect("A lo largo del ").toEqual(readerr.children().first().text());
       expect(2).toEqual(upper.children().length);
+      expect(1).toEqual(readerr.children().length);
+	  
 	  
 	  reader.redistributing_down(readerr,bottom,8)
       expect("A lo largo del tiempo el arte se ha clasificado de \n").toEqual(bottom.children().first().text());
