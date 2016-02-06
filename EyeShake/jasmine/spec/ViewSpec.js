@@ -31,7 +31,7 @@ describe("View", function() {
   }); 
   
   it("7 should be able to create 2 string of similar length", function() {
-     expect(["La historia"," del arte"]).toEqual(view.redistribute("La historia del arte",2));
+     expect(["La historia"," del arte ","es muy chuli"]).toEqual(view.redistribute("La historia del arte es muy chuli",3));
    }); 
   
   

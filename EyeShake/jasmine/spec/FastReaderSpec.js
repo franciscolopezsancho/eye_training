@@ -375,6 +375,155 @@ it("17 should leave the same when don't find any mark (like period,carriage,pare
   });
   
   
+  it("19 should be able to redistribute down multiple times", function() {
+ 	   var html = $('<div class="book"><div id="upper-container" class="upper">'+
+	   '</div><div id="text-bucket-styled" class="reader"></div>'+
+	   '<div id="text-bucket-end" class="downer">'+
+	   '<p>La historia del arte es una. \n</p>'+
+	   '<p>Entendido como cualquier actividad o producto realizado . \n</p>'+
+	   '<p>A lo largo del tiempo el arte se ha clasificado de . \n</p></div>')	
+	  var bottom = $("#text-bucket-end",html);
+	  var readerr = $("#text-bucket-styled",html);
+	  var upper = $("#upper-container",html);	  
+	  
+	  reader.redistributing_up(bottom,readerr,3)
+	  
+      expect("La historia del").toEqual(readerr.children().first().text());
+      expect(" arte es una. \n").toEqual(bottom.children().first().text());
+      expect(3).toEqual(bottom.children().length);
+	  
+	  
+	  reader.redistributing_up(readerr,upper,3)
+	  
+      expect("La historia del").toEqual(upper.children().first().text());	
+      expect(0).toEqual(readerr.children().length);
+      expect(" arte es una. \n").toEqual(bottom.children().first().text());
+	  
+	  
+	  //next blink
+	  reader.redistributing_down(upper,readerr,3)
+      expect("La historia del").toEqual(readerr.children().first().text());
+      expect(0).toEqual(upper.children().length);	
+	 
+	  reader.redistributing_down(readerr,bottom,3)
+      expect("La historia del arte es una. \n").toEqual(bottom.children().first().text());	
+      expect(0).toEqual(readerr.children().length);	
+	  
+	  
+	
+	
+  });
+  
+  it("20 should be able to redistribute down multiple times", function() {
+ 	   var html = $('<div class="book"><div id="upper-container" class="upper">'+
+	   	   '<p>La historia del arte es \n</p>'+
+	   	   '<p>Entendido como cualquier actividad o producto realizado \n</p>'+
+	   	   '<p>A lo largo del tiempo el arte se ha clasificado de \n</p>'+
+	   '</div><div id="text-bucket-styled" class="reader"></div>'+
+	   '<div id="text-bucket-end" class="downer"></div>')	
+	  var bottom = $("#text-bucket-end",html);
+	  var readerr = $("#text-bucket-styled",html);
+	  var upper = $("#upper-container",html);	  
+	  
+	  reader.redistributing_down(upper,readerr,8)
+	  
+      expect("tiempo el arte se ha clasificado de \n").toEqual(readerr.children().first().text());
+      expect("A lo largo del ").toEqual(upper.children().last().text());
+      expect(3).toEqual(upper.children().length);
+	  
+	  
+	  reader.redistributing_down(readerr,bottom,8)
+      expect("tiempo el arte se ha clasificado de \n").toEqual(bottom.children().first().text());
+      expect(0).toEqual(readerr.children().length);
+	  
+	  reader.redistributing_down(upper,readerr,8)
+      expect("A lo largo del ").toEqual(readerr.children().first().text());
+      expect(2).toEqual(upper.children().length);
+	  
+	  reader.redistributing_down(readerr,bottom,8)
+      expect("A lo largo del tiempo el arte se ha clasificado de \n").toEqual(bottom.children().first().text());
+      expect(0).toEqual(readerr.children().length);
+      expect(1).toEqual(bottom.children().length);
+	  
+	  reader.redistributing_down(upper,readerr,8)
+      expect("Entendido como cualquier actividad o producto realizado \n").toEqual(readerr.children().first().text());
+      expect(1).toEqual(upper.children().length);
+	  
+	  reader.redistributing_down(readerr,bottom,8)
+      expect("Entendido como cualquier actividad o producto realizado \n").toEqual(bottom.children().first().text());
+      expect(0).toEqual(readerr.children().length);
+      expect(2).toEqual(bottom.children().length);
+	  
+	  
+	  
+	  
+	  
+	  
+     
+	  
+	  
+      
+	  
+	  
+	
+	
+  });
+  
+  // it("21 should be able to redistribute down multiple times", function() {
+//  	   var html = $('<div class="book"><div id="upper-container" class="upper">'+
+// 	   	   '<p>La historia del arte es \n</p>'+
+// 	   	   '<p>Entendido como cualquier actividad o producto realizado \n</p>'+
+// 	   	   '<p>A lo largo del tiempo el arte se ha clasificado de \n</p>'+
+// 	   '</div><div id="text-bucket-styled" class="reader"></div>'+
+// 	   '<div id="text-bucket-end" class="downer"></div>')
+// 	  var bottom = $("#text-bucket-end",html);
+// 	  var readerr = $("#text-bucket-styled",html);
+// 	  var upper = $("#upper-container",html);
+//
+// 	  reader.redistributing_down(upper,readerr,3)
+//
+//       expect("clasificado de \n").toEqual(readerr.children().first().text());
+//       expect("A lo largo del tiempo el arte se ha ").toEqual(upper.children().last().text());
+//       expect(3).toEqual(upper.children().length);
+//
+//
+// 	  reader.redistributing_down(readerr,bottom,3)
+//       expect("clasificado de \n").toEqual(bottom.children().first().text());
+//       expect(0).toEqual(readerr.children().length);
+//
+// 	  reader.redistributing_down(upper,readerr,3)
+//       expect("arte se dha").toEqual(readerr.children().first().text());
+//       expect("A lo largo del tiempo el ").toEqual(upper.children().last().text());
+//       expect(3).toEqual(upper.children().length);
+	  
+	  // reader.redistributing_down(readerr,bottom,3)
+//       expect("clasificado de \n").toEqual(bottom.children().first().text());
+//       expect(0).toEqual(readerr.children().length);
+//
+// 	  reader.redistributing_down(upper,readerr,8)
+//       expect("Entendido como cualquier actividad o producto realizado \n").toEqual(readerr.children().first().text());
+//       expect(1).toEqual(upper.children().length);
+//
+// 	  reader.redistributing_down(readerr,bottom,8)
+//       expect("Entendido como cualquier actividad o producto realizado \n").toEqual(bottom.children().first().text());
+//       expect(0).toEqual(readerr.children().length);
+//       expect(2).toEqual(bottom.children().length);
+	  
+	  
+	  
+	  
+	  
+	  
+     
+	  
+	  
+      
+	  
+	  
+	
+	
+  // });
+  
   
   
   

@@ -44,47 +44,75 @@ FastReader.prototype.lastIndexOfRec = function(paragraph,amount,toFind){
 FastReader.prototype.redistributing_up = function (from,to,amount){	
 	//create new objects!!!! make it functional
 	var text = this.take_text(from.text(),amount,true)	
-	// if(to.children().length == 0 ){
-	// 	if(toUpdated.indexOf("\n")==-1){
-	// 		to.append('<p>'+toUpdated+'</p>')
-	// 	}else if(toUpdated.indexOf("\n")>-1){
-	// 		to.append('<p>'+toUpdated.substring(0,toUpdated.indexOf("\n")+1)+'</p>')					
-	// 		var rest = toUpdated.substring(toUpdated.indexOf("\n")+1)
-	// 		if(rest){
-	// 			to.append('<p>'+rest+'</p>')
-	// 		}
-	// 	}else if(toUpdated.indexOf(".")>-1){
-	// 		to.append('<p>'+toUpdated.substring(0,toUpdated.indexOf(".")+1)+'</p>')					
-			
-	// 	}
-	// }else if(toUpdated.indexOf("\n")==-1){		
-	// 	to.children().last().text(toUpdated)
-	// }else{
-	// 	//contains carriage
-	// 	to.children().last().text(toUpdated.substring(0,toUpdated.indexOf("\n")+1))		
-	// 	var rest = toUpdated.substring(toUpdated.indexOf("\n")+1)
-	// 	if(rest){
-	// 		to.append('<p>'+rest+'</p>')
-	// 	}
-	// }
-	this.update_to(to,text,["\n","."," (",") ",","])
+	this.update_to(to,text,["\n","."," (",") ",",",":"])
 	//create new objects!!!! make it functional
-	this.update_from(from,["\n","."," (",") ",","],amount)
+	this.update_from(from,["\n","."," (",") ",",",":"],amount)	
+
+}
+
+
+FastReader.prototype.redistributing_down = function (from,to,amount){	
+	//create new objects!!!! make it functional
+	var text = this.take_text(from.text(),amount,false)	
+	this.update_to(to,text,[],true)
+	//create new objects!!!! make it functional
+	this.update_from(from,[],amount,true)
 	
 	
 
 }
-FastReader.prototype.update_to = function(to,text,marks){
+FastReader.prototype.update_to = function(to,text,marks,down){
 	var minIndex = this.find_mark(text,marks)
+	var child = to.children().last()
+	if(down){child = to.children().first()}
 	if(to.children().length == 0 ){
-		to.append('<p>'+this.substring_with_mark(text,minIndex)+'</p>')		
+		to.append('<p>'+this.substring_with_mark(text,minIndex)+'</p>') 
+		}else{
+		// if(down){
+// 		child.text(this.substring_with_mark(text,minIndex)+child.text())
+// 		}else{
+// 		child.text(child.text()+this.substring_with_mark(text,minIndex))
+//
+// 		}
+// 	}
+// 	if(down){
+// 		to.prepend('<p>'+text+'</p>')
+//
+// 	}else{
+		to.children().last().text(to.children().last().text()+this.substring_with_mark(text,minIndex))
+	    
+	 }
+	 
+    if(to.children().last().text().indexOf("\n")>-1){
+   -               to.append('<p></p>')
+		}	
+}
+
+FastReader.prototype.update_from = function(from,marks,amount,down){
+	var child = from.children().first()
+	if(down){child = from.children().last()}
+	var text = child.text()
+	var foundMark = this.find_mark(text,marks)
+	if(foundMark < this.indexOfRec(text,amount," ")){
+		child.text(text.substring(foundMark+1))			
 	}else{
-		to.children().last().text(to.children().last().text()+this.substring_with_mark(text,minIndex))				
+		child.text(this.delete_text(text,amount,true))	
 	}
-	if(to.children().last().text().indexOf("\n")>-1){
-		to.append('<p></p>')
+	if(child.text() == ""){
+		child.remove()
 	}
 }
+
+
+FastReader.prototype.pre_post_append = function(to,text,down){
+	if(down){
+		to.prepend('<p>'+text+'</p>')
+	}else{
+		to.append('<p>'+text+'</p>')		
+	}
+}
+
+
 
 FastReader.prototype.find_mark = function(text,marks){
 	var minFoundAt = text.length + 1;
@@ -125,52 +153,11 @@ FastReader.prototype.substring_with_mark = function(text,markIndex){
 }
 
 
-FastReader.prototype.update_from = function(from,marks,amount){
-	var text = from.children().first().text()
-	var foundMark = this.find_mark(text,marks)
-	if(foundMark < this.indexOfRec(text,amount," ")){
-		from.children().first().text(text.substring(foundMark+1))			
-	}else{
-		from.children().first().text(this.delete_text(text,amount,true))	
-	}
-	if(from.children().first().text() == ""){
-		from.children().first().remove()
-	}
-}
 
 // FastReader.prototype.deal_with_marks_to(to,text){
 //
 // }
 
-FastReader.prototype.redistributing_down = function (from,to,amount){	
-	//create new objects!!!! make it functional	
-	var toUpdated = this.move_text(from.children().last().text(),to.children().first().text(),amount,false,true)	
-	if(to.children().length == 0 ){
-		if(toUpdated.indexOf("\n")==-1){
-			to.prepend('<p>'+toUpdated+'</p>')
-		}else{
-			to.prepend('<p>'+toUpdated.substring(0,toUpdated.indexOf("\n")+1)+'</p>')					
-			var rest = toUpdated.substring(toUpdated.indexOf("\n")+2)
-			if(rest){
-				to.prepend('<p>'+rest+'</p>')
-			}
-		}
-	}else if(toUpdated.indexOf("\n")==-1){		
-		to.children().first().text(toUpdated)
-	}else{
-		//contains carriage
-		to.children().first().text(toUpdated.substring(0,toUpdated.indexOf("\n")+1))		
-		var rest = toUpdated.substring(toUpdated.indexOf("\n")+2)
-		if(rest){
-			to.prepend('<p>'+rest+'</p>')
-		}
-	}
-	//create new objects!!!! make it functional
-	from.children().last().text(this.delete_text(from.children().last().text(),amount,false))		
-	if(from.children().last().text() == ""){
-		from.children().last().remove()
-	}
-}
 
 //make blink reader on punto
 //make blink upper on punto y aparte

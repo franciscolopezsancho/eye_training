@@ -54,9 +54,11 @@ var words_to_watch;
 var response;
 var min_total_letters_factor = 4;
 var averageLength = 6
-var numWords = 6
+var numWords = 4
 var maxLength = averageLength*numWords
 var numLines = 2
+var counterWords = 0
+var initTime = 0 
 
 
 
@@ -103,6 +105,8 @@ function shrink_width(){
 var lastTopPar = "";
 var lastBottomPar = "";
 function populate_bottom(text) {
+$("#bottom-container").children().remove()
+
 	$.each(text.split("\n"),function( index,paragraph ) {
 		$("#bottom-container").append("<p>"+paragraph+"\n"+"</p>")
 	})
@@ -128,31 +132,67 @@ function pickNumWords(from,amount){
 	}
 }
 
-
+var going_up = false
 
 function blink(){
+
+		if(initTime == 0){initTime = new Date() }
 		var amount = pickNumWords($("#bottom-container"),numWords)
 		readerController.redistributing_up($("#bottom-container"),$("#reader-container"),amount)	
-		var paragraphs = viewAke.redistribute($("#reader-container").text(),2)
+		var paragraphs = viewAke.redistribute($("#reader-container").text(),numLines)
 		$("#reader-container").children().remove()
-		$("#reader-container").append("<p>"+paragraphs[0]+"</p>")
-		$("#reader-container").append("<p>"+paragraphs[1]+'</p>')
+		for(p in paragraphs){
+		$("#reader-container").append("<p>"+paragraphs[p]+"</p>")
+		}
 
-		var readerText = $("#reader-container").text()
-		if(readerText.indexOf(".")>-1){
-			setTimeout(function() {reader2Upper(amount)},time_to_read*2);
-		}
-		else if(readerText.indexOf(".")>-1){
-			setTimeout(function() {reader2Upper(amount)},time_to_read*3);
-		}else {
-			setTimeout(function() {reader2Upper(amount)},time_to_read);
-		}
+		delay($("#reader-container").text(),reader2Upper,amount,time_to_read)
+		
 
 }
 
-function reader2Upper(amount){
+function changeDirection(){
+if(going_up){
+	going_up = false
+	setTimeout(blinkDown,1000)
+}else{
+going_up = true
+setTimeout(blink,1000)
+}
+}
 
+
+
+function blinkDown(){
+
+
+
+var paragraphsText = $("#reader-container").text()
+
+readerController.redistributing_down($("#upper-container"),$("#reader-container"),numWords)
+readerController.redistributing_down($("#reader-container"),$("#bottom-container"),numWords)
+if(!going_up){setTimeout(blinkDown,300)}
+		
+
+}
+
+
+
+function delay(readerText,callback,amount,time_to_read){
+	if(readerText.indexOf("\n")>-1){
+	setTimeout(function() {callback(amount)},time_to_read*1.5);
+	}else if(readerText.indexOf(".")>-1 || readerText.indexOf(":")>-1){
+	setTimeout(function() {callback(amount)},time_to_read*2);
+	}else if(readerText.indexOf(",")>-1 || readerText.indexOf("(")>-1 || readerText.indexOf(")")>-1 ){
+		setTimeout(function() {callback(amount)},time_to_read*1.5);
+	}else {
+	setTimeout(function() {callback(amount)},time_to_read);
+	}
+}
+
+function reader2Upper(amount){
+	
 	var paragraphsText = $("#reader-container").text()
+	showSpeed(paragraphsText)
 	$("#reader-container").children().remove()
 	$("#reader-container").append("<p>"+paragraphsText+"</p>")
 	readerController.redistributing_up($("#reader-container"),$("#upper-container"),amount)
@@ -161,9 +201,20 @@ function reader2Upper(amount){
 	addParagraphMark($("#upper-container"))
 	var dif = $("#upper-container")
 	dif.scrollTop(dif[0].scrollHeight)
-    blink();	
+    if(going_up)(blink());	
 
 }
+
+function showSpeed(paragraphsText){
+ counterWords = counterWords + paragraphsText.split(" ").length
+ if((new Date().getTime() - initTime.getTime())/1000 > 59 && (new Date().getTime() - initTime.getTime())/1000 <61){
+	 $("#speed").text(counterWords)
+	 initTime = new Date()
+	 counterWords = 0
+	 }
+}
+
+
 
 function addMark(){
 	var text = $("#reader-container").text()
@@ -223,10 +274,12 @@ $(document).ready(function() {
 	$("#more_time_to_read").bind("click",function(e){
 		modify_time_to_read(1000)
 	});
+	$("#change_direction").click(changeDirection);
+	
 	//avoiding reload page
-	$("#response").bind("enterKey",function(e){
-		blink();
-		});
+	// $("#response").bind("enterKey",function(e){
+// 		blink();
+// 		});
 	$("#response").keydown(function(e){
 	    if(e.keyCode == 13)
 	    {
@@ -257,7 +310,7 @@ $(document).ready(function() {
 	  });
 	  
 	$.get("articuloHistoriaArteWiki.txt", function( data ) {
-  populate_bottom( data );
+  	populate_bottom( data );
 });
 	 
 	//$("#text-bucket").text(text);
@@ -270,7 +323,6 @@ $(document).ready(function() {
 
 
 function receivedText() {
-	  //document.getElementById('editor').appendChild(document.createTextNode(fr.result));
 	populate_bottom(fr.result)
 	  
 	      }    
