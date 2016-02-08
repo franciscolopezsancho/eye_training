@@ -12,8 +12,43 @@ describe("FastReader", function() {
   it("1.1 should be able to take 3 words from the begining of ' to play a Song' even with blank in the begining", function() {
     expect(" to play a").toEqual(reader.take_text(" to play a Song",3,true));
   });
-  
+
+
+  it("1.2 should be able to take words from the begining of ' to play a Song' even with blank in the the middle", function() {
+    expect(" to play a Song \n some else").toEqual(reader.take_text(" to play a Song \n some else",7,true));
+  });
+
+
+  it("1.3 should be able to take words from the begining of ' to play a Song' even with blank at the end", function() {
+    expect(" to play a Song \n").toEqual(reader.take_text(" to play a Song \n",5,true));
+  });
+ 
+it("1.4 should be able to find is a string contains a carriage followed by some letter....or anything but a blank", function() {
+    expect(reader.stickyCarriageIndex(" to play a Song \ntruki",5,true)).not.toBeLessThan(0);
+  });
+
+it("1.5 should be able to take 5 counting carriage as such even with a dodgy one", function() {
+    expect("play a Song \ntruki").toEqual(reader.take_text(" to play a Song \ntruki",5,false));
+  });
+
+it("1.5.1 should be able to take words from the begining of even with dodgy blank in the the middle but when ask for words before that blank", function() {
+    expect(" to play a Song era").toEqual(reader.take_text(" to play a Song era del atun \ntruki",5,true));
+  });
+
+it("1.5.2 should be able to take words from the end of even with dodgy blank in the the middle but when ask for words before that blank", function() {
+    expect("era del atun \ntruki").toEqual(reader.take_text(" to play a Song era del atun \ntruki",5,false));
+  });
+
+it("1.5.3 should be able to take words from the end of even with dodgy blank in the the middle but when ask for words before that blank", function() {
+    expect("o producto realizado \nA lo largo del ").toEqual(reader.take_text("La historia del arte es \nEntendido como cualquier actividad o producto realizado \nA lo largo del ",8,false));
+  });
+			
+
+ 
+
+
   it("2 should be able to move 3 first words from 'should be able to play a Song' to 'almos nothing',adding it before and keep the rest", function() {
+
     expect("should be able almos nothing").toEqual(reader.move_text("should be able to play a Song"," almos nothing",3,true,true));
   });
   
@@ -472,7 +507,6 @@ it("17 should leave the same when don't find any mark (like period,carriage,pare
       expect(1).toEqual(readerr.children().length);
 	  
 	  
-	  
 	  reader.redistributing_down(readerr,bottom,8)
       expect("tiempo el arte se ha clasificado de \n").toEqual(bottom.children().first().text());
       expect(1).toEqual(bottom.children().length);  
@@ -480,11 +514,14 @@ it("17 should leave the same when don't find any mark (like period,carriage,pare
       expect(0).toEqual(readerr.children().length);
 	  
 	  
-	  reader.up_to_reader(upper,readerr,8)
-      expect("o producto realizado \nA lo largo del ").toEqual(readerr.children().last().text());	  
+	  reader.redistributing_down(upper,readerr,8)
+      expect("o producto realizado \n").toEqual(readerr.children().first().text());	  
+      expect("A lo largo del ").toEqual(readerr.children().last().text());	  
+      expect("Entendido como cualquier actividad ").toEqual(upper.children().last().text())
       expect(2).toEqual(upper.children().length);
-      expect(1).toEqual(readerr.children().length);
+      expect(2).toEqual(readerr.children().length);
 	  
+
 	  
 	  reader.redistributing_down(readerr,bottom,8)
       expect("o producto realizado \n").toEqual(bottom.children().first().text());	  
@@ -492,14 +529,18 @@ it("17 should leave the same when don't find any mark (like period,carriage,pare
       expect("").toEqual(readerr.children().text());
       expect(2).toEqual(bottom.children().length);
 	  
-	  reader.up_to_reader(upper,readerr,8)
-      expect("Entendido como cualquier actividad").toEqual(readerr.children().first().text());
+	  reader.redistributing_down(upper,readerr,8)
+	  expect("del arte es \n").toEqual(readerr.children().first().text());
+      expect("Entendido como cualquier actividad ").toEqual(readerr.children().eq(1).text());
       expect(1).toEqual(upper.children().length);
+
+
 	  
 	  reader.redistributing_down(readerr,bottom,8)
-      expect("Entendido como cualquier actividad o producto realizado \n").toEqual(bottom.children().first().text());
+      expect("del arte es \n").toEqual(bottom.children().first().text());
+      expect("Entendido como cualquier actividad o producto realizado \n").toEqual(bottom.children().eq(1).text());
       expect(0).toEqual(readerr.children().length);
-      expect(2).toEqual(bottom.children().length);
+      expect(3).toEqual(bottom.children().length);
 	  
 	  
 	  
