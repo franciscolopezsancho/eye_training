@@ -108,8 +108,30 @@ function populate_bottom(text) {
 $("#bottom-container").children().remove()
 
 	$.each(text.split("\n"),function( index,paragraph ) {
-		$("#bottom-container").append("<p>"+paragraph+"\n"+"</p>")
+		$("#bottom-container").append("<p id="+index+">"+paragraph+"\n"+"</p>")
 	})
+	$("#bottom-container").children().bind("click",function(event){
+    // code to handle children click here
+	var clicked = this
+	var last = $("#upper-container").children().last()
+	var first = $("#bottom-container").children().first()
+	if(last.attr('id') == first.attr('id')){
+		$("#bottom-container").prepend('<p id="'+last.attr('id')+'">'+last.text()+first.text()+'</p>')
+		
+	}
+	
+	$.each($("#bottom-container").children(),function(index,p){
+	if(clicked.id > p.id){$("#upper-container").append(p)}else{return false}
+	});
+	$.each($("#upper-container p").get().reverse(),function(index,p){
+	if(clicked.id < p.id){$("#bottom-container").prepend(p)}else{return false}
+	});
+	$.each($("#upper-container").children(),function(index,p){
+	if(clicked.id == p.id){$("#bottom-container").prepend(p);return false}
+	});
+	
+    event.stopPropagation(); // if you don't want event to bubble up
+	}	);
 }
 
 
@@ -134,18 +156,18 @@ function pickNumWords(from,amount){
 
 var going_up = false
 
-function blink(){
-  while(!stopped){
+function blink(marks){
+  if(!stopped){
 		if(initTime == 0){initTime = new Date() }
 		var amount = pickNumWords($("#bottom-container"),numWords)
-		readerController.redistributing_up($("#bottom-container"),$("#reader-container"),amount)	
+		readerController.redistributing_up($("#bottom-container"),$("#reader-container"),amount,marks)	
 		var paragraphs = viewAke.redistribute($("#reader-container").text(),numLines)
 		$("#reader-container").children().remove()
 		for(p in paragraphs){
 		$("#reader-container").append("<p>"+paragraphs[p]+"</p>")
 		}
 
-		delay($("#reader-container").text(),reader2Upper,amount,time_to_read)
+		delay($("#reader-container").text(),reader2Upper,amount,time_to_read,marks)
 	}	
 
 }
@@ -162,7 +184,10 @@ setTimeout(blink,1000)
 
 function start(){
  	stopped = false
+	going_up = true
  	numWords = 4
+	setTimeout(blink,1000)
+	
 
 }
 var stopped = true
@@ -170,18 +195,29 @@ function stop(){
 	stopped = true
 }
 
+var scrolling = false
 function increaseSpeedUP(){
 	if(!going_up){
-		changeDirection()
+		going_up = true
+	}
+	if(!scrolling){
+		stop()
+		
+		scrolling = true
+		blink([])
 	}
 	numWords = numWords*1.5
-
+	
 
 }
 
+
+
 function increaseSpeedDown(){
 	if(going_up){
-		changeDirection()
+		stop()	
+		going_up = false
+		blinkDown()		
 	}
 	numWords = numWords*1.5
 
@@ -191,7 +227,7 @@ function increaseSpeedDown(){
 
 function blinkDown(){
 
-  while(!stopped){
+  if(!stopped){
 
 
 var paragraphsText = $("#reader-container").text()
@@ -205,25 +241,25 @@ if(!going_up){setTimeout(blinkDown,300)}
 
 
 
-function delay(readerText,callback,amount,time_to_read){
+function delay(readerText,callback,amount,time_to_read,marks){
 	if(readerText.indexOf("\n")>-1){
-	setTimeout(function() {callback(amount)},time_to_read*1.5);
+	setTimeout(function() {callback(amount,marks)},time_to_read*1.5);
 	}else if(readerText.indexOf(".")>-1 || readerText.indexOf(":")>-1){
-	setTimeout(function() {callback(amount)},time_to_read*2);
+	setTimeout(function() {callback(amount,marks)},time_to_read*2);
 	}else if(readerText.indexOf(",")>-1 || readerText.indexOf("(")>-1 || readerText.indexOf(")")>-1 ){
 		setTimeout(function() {callback(amount)},time_to_read*1.5);
 	}else {
-	setTimeout(function() {callback(amount)},time_to_read);
+	setTimeout(function() {callback(amount,marks)},time_to_read);
 	}
 }
 
-function reader2Upper(amount){
+function reader2Upper(amount,marks){
 	
 	var paragraphsText = $("#reader-container").text()
 	showSpeed(paragraphsText)
 	$("#reader-container").children().remove()
 	$("#reader-container").append("<p>"+paragraphsText+"</p>")
-	readerController.redistributing_up($("#reader-container"),$("#upper-container"),amount)
+	readerController.redistributing_up($("#reader-container"),$("#upper-container"),amount,marks)
 	//because redistributing creates an empty <p>
 	//we look for the previous one
 	addParagraphMark($("#upper-container"))

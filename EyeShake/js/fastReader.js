@@ -72,12 +72,15 @@ FastReader.prototype.stickyCarriageIndexRecursive = function(paragraph){
 }
 
 
-FastReader.prototype.redistributing_up = function (from,to,amount){	
+FastReader.prototype.redistributing_up = function (from,to,amount,marks){	
+if(!marks){
+	marks = ["\n","."," (",") ",",",":"]
+}
 	//create new objects!!!! make it functional
 	var text = this.take_text(from.text(),amount,true)	
-	this.update_to(to,text,["\n","."," (",") ",",",":"])
+	this.update_to(to,text,marks)
 	//create new objects!!!! make it functional
-	this.update_from(from,["\n","."," (",") ",",",":"],amount)	
+	this.update_from(from,marks,amount)	
 
 }
 
@@ -143,7 +146,7 @@ FastReader.prototype.update_to = function(to,text,marks,down){
 				to.append('<p>'+text+'</p>') 					
 			}
 		}else{
-			to.append('<p>'+this.substring_with_mark(text,minIndex)+'</p>') 		
+			to.append('<p id="0">'+this.substring_with_mark(text,minIndex)+'</p>') 		
 			}
 	}else{
 		if(down){
@@ -165,7 +168,7 @@ FastReader.prototype.update_to = function(to,text,marks,down){
 	}else{
     
     if(to.children().last().text().indexOf("\n")>-1){
-                 to.append('<p></p>')
+                 to.append('<p id="'+to.children().length+'"></p>')
 		}	
 	}
 	 
