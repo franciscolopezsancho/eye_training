@@ -135,7 +135,7 @@ function pickNumWords(from,amount){
 var going_up = false
 
 function blink(){
-
+  while(!stopped){
 		if(initTime == 0){initTime = new Date() }
 		var amount = pickNumWords($("#bottom-container"),numWords)
 		readerController.redistributing_up($("#bottom-container"),$("#reader-container"),amount)	
@@ -146,7 +146,7 @@ function blink(){
 		}
 
 		delay($("#reader-container").text(),reader2Upper,amount,time_to_read)
-		
+	}	
 
 }
 
@@ -160,10 +160,38 @@ setTimeout(blink,1000)
 }
 }
 
+function start(){
+ 	stopped = false
+ 	numWords = 4
+
+}
+var stopped = true
+function stop(){
+	stopped = true
+}
+
+function increaseSpeedUP(){
+	if(!going_up){
+		changeDirection()
+	}
+	numWords = numWords*1.5
+
+
+}
+
+function increaseSpeedDown(){
+	if(going_up){
+		changeDirection()
+	}
+	numWords = numWords*1.5
+
+
+}
 
 
 function blinkDown(){
 
+  while(!stopped){
 
 
 var paragraphsText = $("#reader-container").text()
@@ -171,7 +199,7 @@ var paragraphsText = $("#reader-container").text()
 readerController.redistributing_down($("#upper-container"),$("#reader-container"),numWords)
 readerController.redistributing_down($("#reader-container"),$("#bottom-container"),numWords)
 if(!going_up){setTimeout(blinkDown,300)}
-		
+}		
 
 }
 
@@ -275,6 +303,10 @@ $(document).ready(function() {
 		modify_time_to_read(1000)
 	});
 	$("#change_direction").click(changeDirection);
+	$("#start").click(start);
+	$("#stop").click(stop);
+	$("#up_faster").click(increaseSpeedUP);
+	$("#down_faster").click(increaseSpeedDown);
 	
 	//avoiding reload page
 	// $("#response").bind("enterKey",function(e){
