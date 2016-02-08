@@ -54,35 +54,79 @@ FastReader.prototype.redistributing_up = function (from,to,amount){
 FastReader.prototype.redistributing_down = function (from,to,amount){	
 	//create new objects!!!! make it functional
 	var text = this.take_text(from.text(),amount,false)	
-	this.update_to(to,text,[],true)
+	this.update_to(to,text,["\n"],true)
 	//create new objects!!!! make it functional
 	this.update_from(from,[],amount,true)
 	
 	
 
 }
+
+
+
+FastReader.prototype.up_to_reader  = function(upper,reader,amount){
+	var taken = this.take_text(upper.children().last().text(),amount,false)
+	var parag = reader.children().first()
+	if(parag.length == 0){
+		reader.append('<p></p>') 		
+		parag = reader.children().first()
+	}
+	parag.text(taken+parag.text())	
+		
+	if(taken.split(" ").length < amount){
+		upper.children().last().remove()
+		var words = taken.trim().split(" ").length
+		if(taken.indexOf("\n")>-1){
+			words = words + 1
+		}
+		upper.children().last().text(this.delete_text(upper.children().last().text(),words,false))			
+		this.up_to_reader(upper,reader,amount - words)
+	}else if(taken.split(" ") == amount){
+		upper.children().last().remove()		
+		upper.children().last().text(this.delete_text(upper.children().last().text(),amount,false))	
+		
+	}else{
+		upper.children().last().text(this.delete_text(upper.children().last().text(),amount,false))	
+	}
+	
+}
+
+
 FastReader.prototype.update_to = function(to,text,marks,down){
 	var minIndex = this.find_mark(text,marks)
 	var child = to.children().last()
 	if(down){child = to.children().first()}
 	if(to.children().length == 0 ){
-		to.append('<p>'+this.substring_with_mark(text,minIndex)+'</p>') 
-		}else{
 		if(down){
-		child.text(this.substring_with_mark(text,minIndex)+child.text())
-	   
+	    	if(text.indexOf("\n")>-1){
+				if(text.substring(text.indexOf("\n")+1) != ""){
+					to.prepend('<p>'+text.substring(text.indexOf("\n")+1)+'</p>')	
+				
+				}
+	        	to.prepend('<p>'+text.substring(0,text.indexOf("\n")+1)+'</p>')		
+			}else{
+				to.append('<p>'+text+'</p>') 					
+			}
 		}else{
-	    
+			to.append('<p>'+this.substring_with_mark(text,minIndex)+'</p>') 		
+			}
+	}else{
+		if(down){
+	    	if(text.indexOf("\n")>-1){
+			to.children().last().text(text.substring(text.indexOf("\n")+1)+child.text())	
+	        to.prepend('<p>'+text.substring(0,text.indexOf("\n")+1)+'</p>')					
+			}else{
+			child.text(text+child.text())			
+		}}else{
 		child.text(child.text()+this.substring_with_mark(text,minIndex))
 	    
 		}
+	}
 
-	 }
+	
 	 
 	if(down){
-    if(to.children().first().text().indexOf("\n")>-1){
-                 to.prepend('<p></p>')
-		}	
+    
 	}else{
     
     if(to.children().last().text().indexOf("\n")>-1){
@@ -151,9 +195,12 @@ FastReader.prototype.isDigit = function(text,index){
 	return false
 }
 
-FastReader.prototype.substring_with_mark = function(text,markIndex){
+FastReader.prototype.substring_with_mark = function(text,markIndex,down){
 	if(markIndex > -1){
-		return text.substring(0,markIndex+1)
+		if(down){
+			return text.substring(markIndex+1)
+			}
+		else{return text.substring(0,markIndex+1)}
 	}else{
 		return text
 	}
