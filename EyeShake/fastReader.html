@@ -25,20 +25,15 @@
 	<body>
 		<form id="main_form" role="form" style="background-color=#F7D358" action="handler.php" method="POST" enctype=multipart/form-data>
 			<div class="panel">
-				
-				<div class="form-group">
-					
-					<label for="response">Response</label>
-					<input type="text" class="form-control" id="response" placeholder="Press Enter to start. Write response and press Enter to check" autofocus="autofocus"/>
-				</div>
+			<div class="loader">
+					<input type="file" id="file-select" name="photos[]" multiple/>
+					<button type="submit" id="upload-button">Upload</button>
+				</div>	
 				
 				<p id="speed"></p>
 			</div>
-			<button id="change_direction">Change Direction</button>
-			<button id="start">Start</button>
-			<button id="stop">Stop</button>
-			<button id="up_faster">up up up</button>
-			<button id="down_faster">down down down</button>
+			<button type="button" id="start">Start</button>
+			<button type="button" id="stop">Stop</button>
 			
 			<div class="panel ">
 				<div class="book">		
@@ -47,10 +42,7 @@
 						<tr><td id="period"></td><td><div id="reader-container" class="reader"></div></td><td id="paragraph"></td></tr></table></div>
 					<div id="bottom-container" class="downer"></div>
 				</div>
-				<div class="loader">
-					<input type="file" id="file-select" name="photos[]" multiple/>
-					<button type="submit" id="upload-button">Upload</button>
-				</div>
+				
 			</div>
 
 			

@@ -120,15 +120,33 @@ $("#bottom-container").children().remove()
 		
 	}
 	
-	$.each($("#bottom-container").children(),function(index,p){
-	if(clicked.id > p.id){$("#upper-container").append(p)}else{return false}
+			var t1 = new Date()
+
+	$.each($("#bottom-container").children(),function(index,p)
+	{
+	if(parseInt(clicked.id) > parseInt(p.id)){$("#upper-container").append(p)}else{
+		console.log("total bottom containter : "+(new Date().getTime()-t1.getTime())/1000)
+		return false}
 	});
+			 t1 = new Date()
+
 	$.each($("#upper-container p").get().reverse(),function(index,p){
-	if(clicked.id < p.id){$("#bottom-container").prepend(p)}else{return false}
+	if(parseInt(clicked.id) < parseInt(p.id)){$("#bottom-container").prepend(p)}else{
+		console.log("total up containter : "+(new Date().getTime()-t1.getTime())/1000)
+		return false}
 	});
+			 t1 = new Date()
+
 	$.each($("#upper-container").children(),function(index,p){
-	if(clicked.id == p.id){$("#bottom-container").prepend(p);return false}
+	if(parseInt(clicked.id) == parseInt(p.id)){$("#bottom-container").prepend(p)
+		console.log("total same containter : "+(new Date().getTime()-t1.getTime())/1000)
+
+		return false}
 	});
+	var dif = $("#upper-container")
+	dif.scrollTop(dif[0].scrollHeight)
+	var duf = $("#bottom-container")
+	duf.scrollTop(0)
 	
     event.stopPropagation(); // if you don't want event to bubble up
 	}	);
@@ -265,6 +283,8 @@ function reader2Upper(amount,marks){
 	addParagraphMark($("#upper-container"))
 	var dif = $("#upper-container")
 	dif.scrollTop(dif[0].scrollHeight)
+	var duf = $("#bottom-container")
+	duf.scrollTop(0)
     if(going_up)(blink());	
 
 }
@@ -322,7 +342,6 @@ function cleanParagraphMark(){
 
 
 $(document).ready(function() {
-	$("#start").click(blink);
 	//configuration buttons
 	$("#more_width").click(add_width);
 	$("#less_width").click(shrink_width);
