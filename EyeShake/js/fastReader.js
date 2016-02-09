@@ -96,7 +96,64 @@ FastReader.prototype.redistributing_down = function (from,to,amount){
 
 }
 
+FastReader.prototype.reset_focus = function (event){
+    // code to handle children click here
+    if(stopped){
+	var clicked = this
+	var last = $("#upper-container").children().last()
+	var first = $("#bottom-container").children().first()
+	
+			var t1 = new Date()
 
+	$.each($("#bottom-container").children(),function(index,p)
+	{
+	if(parseInt(clicked.id) > parseInt(p.id)){
+		if(parseInt(p.id) == $("#upper-container").children().last().attr("id")){
+			//merge them
+			var combinedText = $("#upper-container").children().last().text()+$(p).text()
+			var id = p.id
+		$(p).remove()
+		$("#upper-container").children().last().remove()
+		$("#upper-container").append("<p id="+id+">"+combinedText+"</p>")
+		}else{
+			$("#upper-container").append(p)
+
+		}
+	}else{
+		console.log("total bottom containter : "+(new Date().getTime()-t1.getTime())/1000)
+		return false}
+	});
+			 t1 = new Date()
+
+	$.each($("#upper-container p").get().reverse(),function(index,p){
+	if(parseInt(clicked.id) < parseInt(p.id)){$("#bottom-container").prepend(p)}else{
+		console.log("total up containter : "+(new Date().getTime()-t1.getTime())/1000)
+		return false}
+	});
+			 t1 = new Date()
+
+	// $.each($("#upper-container").children(),function(index,p){
+	// if(parseInt(clicked.id) == parseInt(p.id)){
+	// 	var combinedText = $(p).text()+$(clicked).text()
+	// 	var id = clicked.id
+	// 	$(p).remove()
+	// 	$(clicked).remove()
+	// 	$("#bottom-container").prepend("<p id="+id+">"+combinedText+"</p>")
+	// 	console.log("total same containter : "+(new Date().getTime()-t1.getTime())/1000)
+
+	// 	return false}
+	// });
+	$("#upper-container").children().bind("click",this.reset_focus	)
+	$("#bottom-container").children().bind("click",this.reset_focus	)
+	var dif = $("#upper-container")
+	dif.scrollTop(dif[0].scrollHeight)
+	var duf = $("#bottom-container")
+	duf.scrollTop(0)
+	event.stopPropagation();
+	start();
+	}
+     // if you don't want event to bubble up
+	}
 
 FastReader.prototype.up_to_reader  = function(upper,reader,amount){
 	var taken = this.take_text(upper.children().last().text(),amount,false)
