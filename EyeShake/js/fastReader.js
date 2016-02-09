@@ -132,8 +132,12 @@ FastReader.prototype.melt = function(node){
 
 FastReader.prototype.update_to = function(to,text,marks,down){
 	var minIndex = this.find_mark(text,marks)
-	var child = to.children().last()
+		if(to.children().last().text().indexOf("\n")>-1){
+                 to.append('<p id="'+to.children().length+'"></p>')
+		}	
+		var child = to.children().last()
 	if(down){child = to.children().first()}
+
 	if(to.children().length == 0 ){
 		if(down){
 	    	if(text.indexOf("\n")>-1){
@@ -201,7 +205,7 @@ if(numWords == amount){
 	if(foundMark < this.indexOfRec(text,amount," ")){
 		child.text(text.substring(foundMark+1))			
 	}else{
-		child.text(this.delete_text(text,amount,!down))	
+		child.text(this.delete_text(text,amount,true))	
 	}
 	if(child.text() == ""){
 		child.remove()
