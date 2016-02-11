@@ -46,7 +46,7 @@ $.getScript("js/fastReader.js", function(){
 
 var items = ['Im very happy'];
 var width = 600;
-var time_to_read = 200;
+var time_to_read = 150;
 var text = 'In the twelfth and thirteenth centuries, the Jurchen Jin Dynasty (1115–1234) waged a series of military campaigns against the Chinese Song Dynasty (960–1279). In 1115, the Jurchens rebelled against their overlords, the Khitans of the Liao Dynasty (907–1125), and declared the formation of the Jin. Allying with the Song against their common enemy the Liao, the Jin promised to return to the Song the territories in northern China that had fallen under Liao control since 938. The Jurchens quick defeat of the Liao combined with Song military failures made the Jin reluctant to cede these territories. After a series of failed negotiations that embittered both sides, the Jurchens attacked the Song in November 1125, dispatching one army towards Taiyuan and the other towards Kaifeng, the Song capital. Surprised by the news of an invasion, the Song general stationed in Taiyuan retreated from the city, which was besieged and later captured. As the second Jin army approached the capital, Emperor Huizong of the Song abdicated and fled south. A new emperor, Qinzong, was enthroned. The Jurchens began a siege against Kaifeng in 1126, but Qinzong negotiated for their retreat from the capital after he agreed to pay a large annual indemnity. Qinzong reneged on the deal and ordered Song forces to defend the prefectures instead of fortifying the capital. The Jin resumed their war against the Song and again besieged Kaifeng in 1127. The Chinese emperor was captured in an event known as the Jingkang Incident, the capital was looted, and the Song lost northern China to the Jin. Remnants of the Song retreated to southern China and, after brief stays in several temporary capitals, eventually relocated to Hangzhou. The retreat of the Song court marked the end of the Northern Song era and the beginning of the Southern Song.'
 //var text = 'Lorem ipsum dolor draw attention sit amet, consectetuer adipiscing elit. Nam nibh. Nunc varius facilisis eros';
 var number_words = 3;
@@ -123,6 +123,8 @@ var readerController = new FastReader()
 var viewAke = new View()
 
 
+
+
 function pickNumWords(from,amount){
 	if(from.children().first().text().length == 0) return amount
 	var allWords = readerController.take_text(from.children().first().text(),amount,true)
@@ -165,13 +167,15 @@ function start(){
  	stopped = false
 	going_up = true
  	numWords = 4
+	$("#loader").hide()
 	setTimeout(blink,1000)
 	
 
 }
 var stopped = true
 function stop(){
-	stopped = true
+$("#loader").show()
+stopped = true
 }
 
 var scrolling = false
@@ -222,7 +226,7 @@ if(!going_up){setTimeout(blinkDown,300)}
 
 function delay(readerText,callback,amount,time_to_read,marks){
 	if(readerText.indexOf("\n")>-1){
-	setTimeout(function() {callback(amount,marks)},time_to_read*1.5);
+	setTimeout(function() {callback(amount,marks)},time_to_read*1);
 	}else if(readerText.indexOf(".")>-1 || readerText.indexOf(":")>-1){
 	setTimeout(function() {callback(amount,marks)},time_to_read*2);
 	}else if(readerText.indexOf(",")>-1 || readerText.indexOf("(")>-1 || readerText.indexOf(")")>-1 ){
@@ -243,6 +247,8 @@ function reader2Upper(amount,marks){
 	//we look for the previous one
 	addParagraphMark($("#upper-container"))
 	$("#upper-container").children().bind("click",readerController.reset_focus	)
+	$("#current").text($("#upper-container").children().last().attr("id"))
+	
 	var dif = $("#upper-container")
 	dif.scrollTop(dif[0].scrollHeight)
 	var duf = $("#bottom-container")
@@ -305,20 +311,6 @@ function cleanParagraphMark(){
 
 $(document).ready(function() {
 	//configuration buttons
-	$("#more_width").click(add_width);
-	$("#less_width").click(shrink_width);
-	$("#more_words").bind("click",function(e){
-		modify_words(1)
-	});
-	$("#less_words").bind("click",function(e){
-		modify_words(-1)
-	});
-	$("#less_time_to_read").bind("click",function(e){
-		modify_time_to_read(-1000)
-	});
-	$("#more_time_to_read").bind("click",function(e){
-		modify_time_to_read(1000)
-	});
 	$("#start").click(start);
 	$("#stop").click(stop);
 	$("#truki").bind("click",function(e){
@@ -328,18 +320,9 @@ $(document).ready(function() {
 			stop()
 		}
 	})
-	
-	//avoiding reload page
-	// $("#response").bind("enterKey",function(e){
-// 		blink();
-// 		});
-	$("#response").keydown(function(e){
-	    if(e.keyCode == 13)
-	    {
-	        $(this).trigger("enterKey");
-	    }
-	});
-	
+	$("#goto").bind("change",function(){
+		$("#"+$(this).val()).click()
+	})
 	$("#main_form").submit(function(event) {
 	      
 		  /* stop form from submitting normally */
@@ -381,9 +364,7 @@ function receivedText() {
 	      }    
 
 
-var form = document.getElementById('main_form');
-var fileSelect = document.getElementById('file-select');
-var uploadButton = document.getElementById('upload-button');
+
 
 
 

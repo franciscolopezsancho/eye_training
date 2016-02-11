@@ -74,7 +74,7 @@ FastReader.prototype.stickyCarriageIndexRecursive = function(paragraph){
 
 FastReader.prototype.redistributing_up = function (from,to,amount,marks){	
 if(!marks){
-	marks = ["\n","."," (",") ",",",":"]
+	marks = ["\n","."," (",") ",",",":","?"," '","' "]
 }
 	//create new objects!!!! make it functional
 	var text = this.take_text(from.text(),amount,true)	
@@ -97,7 +97,7 @@ FastReader.prototype.redistributing_down = function (from,to,amount){
 }
 
 FastReader.prototype.reset_focus = function (event){
-    // code to handle children click here
+event.stopPropagation();
     if(stopped){
 	var clicked = this
 	var last = $("#upper-container").children().last()
@@ -130,27 +130,14 @@ FastReader.prototype.reset_focus = function (event){
 		console.log("total up containter : "+(new Date().getTime()-t1.getTime())/1000)
 		return false}
 	});
-			 t1 = new Date()
-
-	// $.each($("#upper-container").children(),function(index,p){
-	// if(parseInt(clicked.id) == parseInt(p.id)){
-	// 	var combinedText = $(p).text()+$(clicked).text()
-	// 	var id = clicked.id
-	// 	$(p).remove()
-	// 	$(clicked).remove()
-	// 	$("#bottom-container").prepend("<p id="+id+">"+combinedText+"</p>")
-	// 	console.log("total same containter : "+(new Date().getTime()-t1.getTime())/1000)
-
-	// 	return false}
-	// });
 	$("#upper-container").children().bind("click",this.reset_focus	)
 	$("#bottom-container").children().bind("click",this.reset_focus	)
 	var dif = $("#upper-container")
 	dif.scrollTop(dif[0].scrollHeight)
 	var duf = $("#bottom-container")
 	duf.scrollTop(0)
-	event.stopPropagation();
 	start();
+	event.stopPropagation();
 	}
      // if you don't want event to bubble up
 	}

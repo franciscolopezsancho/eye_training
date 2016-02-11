@@ -24,16 +24,21 @@
 	</head>
 	<body>
 		<form id="main_form" role="form" style="background-color=#F7D358" action="handler.php" method="POST" enctype=multipart/form-data>
-			<div class="panel">
-			<div class="loader">
-					<input type="file" id="file-select" name="photos[]" multiple/>
-					<button type="submit" id="upload-button">Upload</button>
+			<div id="loader" class="loader">
+				<table id="options"><tr>
+					<td><input type="file" id="file-select" name="photos[]" multiple/></td>
+					<td><button type="submit" id="upload-button">Upload</button></td>
+					<td><input type="text" id="goto"/></td>
+				</tr>
+				</table>
+					
 				</div>	
 				
-				<p id="speed"></p>
+				<div><p id="speed"></p></div>
+				<div><p id="current"></p></div>
+				
 			</div>
-			<button type="button" id="start">Start</button>
-			<button type="button" id="stop">Stop</button>
+		
 			
 			<div class="panel ">
 				<div id="book" class="book">		
@@ -43,7 +48,6 @@
 					<div id="bottom-container" class="downer"></div>
 				</div>
 				
-			</div>
 
 			
 			
