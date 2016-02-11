@@ -15,6 +15,11 @@
 	background-color: black;	
 }
 
+body
+{
+  background: black;
+}
+
 .book {
   	height:800px;
 	margin-left: 30%;
@@ -69,6 +74,7 @@
 	font-size:medium;
 	font-family:verdana;
 	
+	
 }
 
 
@@ -109,7 +115,16 @@
 	overflow:hidden;
 }
 
-@media only screen and (min-device-width: 200px) {
+
+.all-container {
+	height:800px;
+	overflow-y:scroll;
+	text-align:justify;
+	
+	
+}
+
+@media only screen and (max-device-width: 700px) {
 	.book {
 	  	height:600px;
 		margin-left: 2%;
@@ -166,6 +181,14 @@
 	@keyframes example {
 	    from {background-color: #444444;}
 	    to {background-color: black;}
+	}
+	
+	.all-container {
+		height:550px;
+		overflow-y:scroll;
+		text-align:justify;
+	
+	
 	}
 }
 

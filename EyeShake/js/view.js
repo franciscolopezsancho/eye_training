@@ -46,15 +46,15 @@ $.getScript("js/fastReader.js", function(){
 
 var items = ['Im very happy'];
 var width = 600;
-var time_to_read = 150;
+var time_to_read = 200;
 var text = 'In the twelfth and thirteenth centuries, the Jurchen Jin Dynasty (1115–1234) waged a series of military campaigns against the Chinese Song Dynasty (960–1279). In 1115, the Jurchens rebelled against their overlords, the Khitans of the Liao Dynasty (907–1125), and declared the formation of the Jin. Allying with the Song against their common enemy the Liao, the Jin promised to return to the Song the territories in northern China that had fallen under Liao control since 938. The Jurchens quick defeat of the Liao combined with Song military failures made the Jin reluctant to cede these territories. After a series of failed negotiations that embittered both sides, the Jurchens attacked the Song in November 1125, dispatching one army towards Taiyuan and the other towards Kaifeng, the Song capital. Surprised by the news of an invasion, the Song general stationed in Taiyuan retreated from the city, which was besieged and later captured. As the second Jin army approached the capital, Emperor Huizong of the Song abdicated and fled south. A new emperor, Qinzong, was enthroned. The Jurchens began a siege against Kaifeng in 1126, but Qinzong negotiated for their retreat from the capital after he agreed to pay a large annual indemnity. Qinzong reneged on the deal and ordered Song forces to defend the prefectures instead of fortifying the capital. The Jin resumed their war against the Song and again besieged Kaifeng in 1127. The Chinese emperor was captured in an event known as the Jingkang Incident, the capital was looted, and the Song lost northern China to the Jin. Remnants of the Song retreated to southern China and, after brief stays in several temporary capitals, eventually relocated to Hangzhou. The retreat of the Song court marked the end of the Northern Song era and the beginning of the Southern Song.'
 //var text = 'Lorem ipsum dolor draw attention sit amet, consectetuer adipiscing elit. Nam nibh. Nunc varius facilisis eros';
 var number_words = 3;
 var words_to_watch;
 var response;
 var min_total_letters_factor = 4;
-var averageLength = 6
-var numWords = 4
+var averageLength = 8
+var numWords = 3
 var maxLength = averageLength*numWords
 var numLines = 2
 var counterWords = 0
@@ -106,11 +106,16 @@ var lastTopPar = "";
 var lastBottomPar = "";
 function populate_bottom(text) {
 $("#bottom-container").children().remove()
+$("#all-container").children().remove()
 
 	$.each(text.split("\n"),function( index,paragraph ) {
 		$("#bottom-container").append("<p id="+index+">"+paragraph+"\n"+"</p>")
+		$("#all-container").append("<p id="+index+">"+paragraph+"\n"+"</p>")
+		
 	})
-	$("#bottom-container").children().bind("click",readerController.reset_focus	);
+	$("#all-container").children().bind("click",readerController.reset_focus	);
+	
+	$("#current").text("0")
 }
 
 
@@ -166,46 +171,32 @@ setTimeout(blink,1000)
 function start(){
  	stopped = false
 	going_up = true
- 	numWords = 4
+ 	numWords = 3
 	$("#loader").hide()
-	setTimeout(blink,1000)
+	$("#all-container").hide()
+	$("#upper-container").show()
+	$("#bottom-container").show()
+	$("#truki").show()
+	setTimeout(blink,100)
 	
 
 }
 var stopped = true
 function stop(){
-$("#loader").show()
+	$("#loader").show()
+	$("#truki").hide()
+	$("#upper-container").hide()
+	$("#bottom-container").hide()
+	$("#all-container").show()
+	//$("#all-container").scrollTo($("#"+$("#current").text()+""))
+	//$("#"+$("#current").text()+"").get(0).scrollIntoView()
+	$("#all-container").children().eq($("#current").text()).click()
+
+
 stopped = true
 }
 
 var scrolling = false
-function increaseSpeedUP(){
-	if(!going_up){
-		going_up = true
-	}
-	if(!scrolling){
-		stop()
-		
-		scrolling = true
-		blink([])
-	}
-	numWords = numWords*1.5
-	
-
-}
-
-
-
-function increaseSpeedDown(){
-	if(going_up){
-		stop()	
-		going_up = false
-		blinkDown()		
-	}
-	numWords = numWords*1.5
-
-
-}
 
 
 function blinkDown(){
@@ -228,7 +219,7 @@ function delay(readerText,callback,amount,time_to_read,marks){
 	if(readerText.indexOf("\n")>-1){
 	setTimeout(function() {callback(amount,marks)},time_to_read*1);
 	}else if(readerText.indexOf(".")>-1 || readerText.indexOf(":")>-1){
-	setTimeout(function() {callback(amount,marks)},time_to_read*2);
+	setTimeout(function() {callback(amount,marks)},time_to_read*2.5);
 	}else if(readerText.indexOf(",")>-1 || readerText.indexOf("(")>-1 || readerText.indexOf(")")>-1 ){
 		setTimeout(function() {callback(amount)},time_to_read*1.5);
 	}else {
@@ -246,7 +237,7 @@ function reader2Upper(amount,marks){
 	//because redistributing creates an empty <p>
 	//we look for the previous one
 	addParagraphMark($("#upper-container"))
-	$("#upper-container").children().bind("click",readerController.reset_focus	)
+	//$("#upper-container").children().bind("click",readerController.reset_focus	)
 	$("#current").text($("#upper-container").children().last().attr("id"))
 	
 	var dif = $("#upper-container")
@@ -306,22 +297,29 @@ function cleanParagraphMark(){
 
 
 
-
+function changeState(){
+if(stopped){
+	start()
+}else{
+	stop()
+}
+}
 
 
 $(document).ready(function() {
 	//configuration buttons
 	$("#start").click(start);
 	$("#stop").click(stop);
-	$("#truki").bind("click",function(e){
-		if(stopped){
-			start()
-		}else{
-			stop()
-		}
-	})
-	$("#goto").bind("change",function(){
-		$("#"+$(this).val()).click()
+	$("#truki").click(stop)
+	$("#upper-container").bind("click",changeState)	
+	$("#bottom-container").bind("click",changeState)
+	
+	$("#goto").bind("blur",function(){
+		//$("#"+$(this).val()).click()
+		$("#current").text($(this).val())
+		$("#all-container").children().eq($(this).val()).click()
+// 		$("#"+$("#current").text($(this).val())+"").get(0).scrollIntoView()
+		
 	})
 	$("#main_form").submit(function(event) {
 	      
@@ -345,8 +343,22 @@ $(document).ready(function() {
 		}
 	  });
 	  
+	  $(document).keydown(function(e){
+	  
+	     if(e.keyCode == 32){
+	         // user has pressed space
+			 	changeState()	
+				return false
+				     }
+			  	
+				
+	 				}
+					
+					);
+	  
 	$.get("articuloHistoriaArteWiki.txt", function( data ) {
   	populate_bottom( data );
+	stop();
 });
 	 
 	//$("#text-bucket").text(text);

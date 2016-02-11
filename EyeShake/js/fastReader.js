@@ -75,6 +75,7 @@ FastReader.prototype.stickyCarriageIndexRecursive = function(paragraph){
 FastReader.prototype.redistributing_up = function (from,to,amount,marks){	
 if(!marks){
 	marks = ["\n","."," (",") ",",",":","?"," '","' "]
+	//marks = ["\n","."]
 }
 	//create new objects!!!! make it functional
 	var text = this.take_text(from.text(),amount,true)	
@@ -126,12 +127,12 @@ event.stopPropagation();
 			 t1 = new Date()
 
 	$.each($("#upper-container p").get().reverse(),function(index,p){
-	if(parseInt(clicked.id) < parseInt(p.id)){$("#bottom-container").prepend(p)}else{
+	if(parseInt(clicked.id) <= parseInt(p.id)){$("#bottom-container").prepend(p)}else{
 		console.log("total up containter : "+(new Date().getTime()-t1.getTime())/1000)
 		return false}
 	});
-	$("#upper-container").children().bind("click",this.reset_focus	)
-	$("#bottom-container").children().bind("click",this.reset_focus	)
+	//$("#upper-container").children().bind("click",this.reset_focus	)
+	//$("#bottom-container").children().bind("click",this.reset_focus	)
 	var dif = $("#upper-container")
 	dif.scrollTop(dif[0].scrollHeight)
 	var duf = $("#bottom-container")
