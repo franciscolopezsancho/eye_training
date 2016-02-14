@@ -138,7 +138,7 @@ event.stopPropagation();
 	var duf = $("#bottom-container")
 	duf.scrollTop(0)
 	start();
-	event.stopPropagation();
+	//event.stopPropagation();
 	}
      // if you don't want event to bubble up
 	}

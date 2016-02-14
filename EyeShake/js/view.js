@@ -116,6 +116,7 @@ $("#all-container").children().remove()
 	$("#all-container").children().bind("click",readerController.reset_focus	);
 	
 	$("#current").text("0")
+	$("#goto").val("0")
 }
 
 
@@ -173,24 +174,44 @@ function start(){
 	going_up = true
  	numWords = 3
 	$("#loader").hide()
+	$("#stats").show()
+	
 	$("#all-container").hide()
 	$("#upper-container").show()
 	$("#bottom-container").show()
 	$("#truki").show()
-	setTimeout(blink,100)
+	setTimeout(blink,700)
 	
 
 }
+
+
+function halt(){
+if(stopped){
+	stopped = false
+	setTimeout(blink,300)
+	}else{
+	stopped = true}
+}
 var stopped = true
 function stop(){
+$("#goto").val($("#current").text())
+
 	$("#loader").show()
+	$("#stats").hide()
+	
 	$("#truki").hide()
 	$("#upper-container").hide()
 	$("#bottom-container").hide()
 	$("#all-container").show()
-	//$("#all-container").scrollTo($("#"+$("#current").text()+""))
-	//$("#"+$("#current").text()+"").get(0).scrollIntoView()
-	$("#all-container").children().eq($("#current").text()).click()
+	$("#all-container").scrollTo($("#all-container").children().eq($("#current").text()),
+	{
+	  offset: {top:-300},
+	})
+	
+	
+	setTimeout($("#all-container").children().eq($("#current").text()).addClass('upper-last-child'),100)
+	
 
 
 stopped = true
@@ -321,6 +342,20 @@ $(document).ready(function() {
 // 		$("#"+$("#current").text($(this).val())+"").get(0).scrollIntoView()
 		
 	})
+	$("#goto").keydown(function(e){
+	  
+	     
+				     if(e.keyCode == 13){
+				         // user has pressed enter
+				 		$("#current").text($(this).val())
+				 		$("#all-container").children().eq($(this).val()).click()
+							return false
+							     }
+			  	
+				
+	 				}
+					
+					);
 	$("#main_form").submit(function(event) {
 	      
 		  /* stop form from submitting normally */
@@ -347,9 +382,10 @@ $(document).ready(function() {
 	  
 	     if(e.keyCode == 32){
 	         // user has pressed space
-			 	changeState()	
+			 	halt()	
 				return false
 				     }
+				     
 			  	
 				
 	 				}
@@ -358,6 +394,7 @@ $(document).ready(function() {
 	  
 	$.get("articuloHistoriaArteWiki.txt", function( data ) {
   	populate_bottom( data );
+	
 	stop();
 });
 	 

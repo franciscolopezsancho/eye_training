@@ -1,7 +1,16 @@
 #main_form {
 	background-color: black;	
+	height:95%;
+	/*overflow-y:hidden;*/
+	
 }
 
+#main {
+	margin-left:0%;
+}
+input {
+	width:30px;
+}
 .panel {
 		background-color: black;	
 }
@@ -15,17 +24,21 @@
 	background-color: black;	
 }
 
-body
+body, html {height:100%;  background: black;
+}
+html body
 {
   background: black;
+  background-color:black;
+/*overflow-y:hidden;*/
+  
 }
 
 .book {
   	height:800px;
-	margin-left: 30%;
-	margin-right: 30%;
+	margin-left: 0%;
+	margin-right: 0%;
 	font-family:verdana;
-	overflow-y:hidden;
 	
 	
 
@@ -77,8 +90,33 @@ body
 	
 }
 
+.lateral {
+	width:25%;
+	vertical-align:top;
+	padding-top:20%;
+}
 
 
+
+.lateral-table{
+	width:100%;
+}
+
+#current {
+	float:right;
+	padding-right:10px;
+}
+.goto{
+	float:right;
+}
+#goto {
+	float:right;
+	margin-right:10px;
+	margin-left:10px;
+	padding:0px;
+	width:30px;
+	
+}
 
 
 .downer {
@@ -90,13 +128,7 @@ body
 
 	
 }
-.loader {
-	height:10px;
-}
-.panel button.play  {
-	margin-left: 200px;
-	margin-right: 200px;
-}
+
 
 
 
@@ -171,6 +203,10 @@ body
 	
 	}
 	
+	.main_form {
+		overflow:scroll;
+	}
+	
 	.upper-last-child {
 		background-color: black;
 		animation-name: example; /* Chrome, Safari, Opera */
@@ -190,6 +226,13 @@ body
 	
 	
 	}
+	
+	.lateral {
+		width:10%;
+	}
+	
+	body, html {height:100%;overflow-y:scroll;
+}
 }
 
 
