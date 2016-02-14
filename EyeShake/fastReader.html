@@ -43,14 +43,14 @@
 							</table>
 					<td class="lateral" id="loader">
 							<table  class="lateral-table">
-							<tr><td>
+							<tr><td id="file-select-column">
 							<span class="btn btn-default btn-xs">
 							
 							<input class="glyphicon glyphicon-floppy-disk" type="file" id="file-select" name="photos[]"></input>
 							</span>
 							</td>
-						<td>
-						
+						<td id="loading-message-column">
+						<span id="loading-message"/>
 					</td>
 								
 							<td class="goto">
@@ -73,7 +73,20 @@
 							<div id="all-container" class="all-container"></div>
 						</div>
 						</td>
-						<td class="lateral"></td>
+						<td class="lateral">
+							<table  class="lateral-table">
+							<tr><td >
+								<div class="input-group input-group-sm">
+								
+							<input  class="input-group-addon"  type="text" id="time-2-read"/>
+							</div>
+							</td>
+							<td/>
+							<td/>
+						</tr>
+					</table>
+							
+						</td>
 				
 
 			

@@ -3,7 +3,7 @@ function View() {}
 var readerController = new FastReader()
 var viewAke = new View()
 
-var time_to_read = 200;
+var time_to_read = 250;
 var number_words = 3;
 var words_to_watch;
 var averageLength = 8
@@ -103,6 +103,8 @@ function start(){
 	$("#all-container").hide()
 	$("#upper-container").show()
 	$("#bottom-container").show()
+	$("#timeo-2-read").hide()
+	
 	$("#truki").show()
 	setTimeout(blink,700)
 	
@@ -123,6 +125,7 @@ $("#goto").val($("#current").text())
 
 	$("#loader").show()
 	$("#stats").hide()
+	$("#timeo-2-read").show()
 	
 	$("#truki").hide()
 	$("#upper-container").hide()
@@ -175,27 +178,22 @@ function blink(marks){
 	}	
 
 }
-var lastParagraphIsEndOfSentece = false
+var lastWordIsEndOfSentece = false
 
 function delay(readerText,callback,amount,time_to_read,marks,endOfSentence){
-	var isBegining = !lastParagraphIsEndOfSentece
-	if(lastParagraphIsEndOfSentece){
-	setTimeout(function() {callback(amount,marks)},time_to_read*3);
-	
-	}else if(readerText.indexOf("\n")>-1 && readerText.indexOf(".")==-1){
-	
+	var isBegining = !lastWordIsEndOfSentece
+	if(lastWordIsEndOfSentece){
+	setTimeout(function() {callback(amount,marks)},time_to_read*2);	
+	}else if(endOfSentence){
 	setTimeout(function() {callback(amount,marks)},time_to_read*4);
-	}else if(readerText.indexOf("\n")>-1){
-	
-	setTimeout(function() {callback(amount,marks)},time_to_read*2);
-	}else if(readerText.indexOf(".")>-1 || readerText.indexOf(":")>-1){
-	setTimeout(function() {callback(amount,marks)},time_to_read*2.5);
-	}else if(readerText.indexOf(",")>-1 || readerText.indexOf("(")>-1 || readerText.indexOf(")")>-1 ){
+	}else if(readerText.indexOf("\n")>-1 && readerText.indexOf(".")==-1 && readerText.trim().length > 2){	
+	setTimeout(function() {callback(amount,marks)},time_to_read*4);
+	}else  if(readerText.indexOf(",")>-1 || readerText.indexOf("(")>-1 || readerText.indexOf(")")>-1 || readerText.indexOf(":")>-1){
 		setTimeout(function() {callback(amount)},time_to_read*1.5);
 	}else {
 	setTimeout(function() {callback(amount,marks)},time_to_read);
 	}
-	lastParagraphIsEndOfSentece = endOfSentence
+	lastWordIsEndOfSentece = endOfSentence
 	
 }
 
@@ -278,6 +276,7 @@ if(stopped){
 }
 }
 
+var idInterval = undefined;
 
 $(document).ready(function() {
 	//configuration buttons
@@ -308,31 +307,12 @@ $(document).ready(function() {
 	 				}
 					
 					);
-	$("#main_form").submit(function(event) {
-	      
-		  /* stop form from submitting normally */
-	      event.preventDefault();
-	       $("#upload-button").innerHTML = 'Uploading...';
-	       // Get the selected files from the input.
-	        var files = $("#file-select")[0].files;
-	       // Create a new FormData object.
-	        var formData = new FormData();
-	       // Loop through each of the selected files.
-	        for (var i = 0; i < files.length; i++) {
-	          var file = files[i];
-	       // Check the file type.
-	       // Add the file to the request.
-	        fr = new FileReader();
-	        fr.onload = receivedText;
-	       fr.readAsText(file);
-	       //                   fr.readAsDataURL(file);
-	          formData.append('photos[]', file, file.name);
-		}
-	  });
-	  
+	$("#time-2-read").val(time_to_read)				
+	$("#time-2-read").bind("change",function(e){
+		time_to_read = $("#time-2-read").val()
+	})
+	
 	 $("#file-select").change(function(){
-      $("#upload-button").innerHTML = 'Uploading...';
-      // Get the selected files from the input.
        var files = $("#file-select")[0].files;
       // Create a new FormData object.
        var formData = new FormData();
@@ -372,13 +352,17 @@ $(document).ready(function() {
 	
 });
 
+var count = 0;
 
-
-
-function receivedText() {
+function loading(){
+      count++;
+      var dots = new Array(count % 10).join('.');
+      $("#loading-message").text(dots)
+    }
+  
+function receivedText(loading) {
 	populate_bottom(fr.result)
-	  
-	      }    
+	}    
 
 
 
