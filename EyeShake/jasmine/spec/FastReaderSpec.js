@@ -12,6 +12,12 @@ describe("FastReader", function() {
   it("1.1 should be able to take 3 words from the begining of ' to play a Song' even with blank in the begining", function() {
     expect(" to play a").toEqual(reader.take_text(" to play a Song",3,true));
   });
+  
+  
+  it("1.1.1 should be able to take 3 words from the begining of ' to play a Song' even with blank in the begining", function() {
+    expect("way I can.’\n").toEqual(reader.take_text("way I can.’\n\nThe man leaned aga",3,true));
+  });
+  
 
 
   it("1.2 should be able to take words from the begining of ' to play a Song' even with blank in the the middle", function() {

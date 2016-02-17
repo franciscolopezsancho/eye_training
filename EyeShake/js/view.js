@@ -67,6 +67,17 @@ $("#all-container").children().remove()
 	
 	$("#current").text("0")
 	$("#goto").val("0")
+	$("#main-form").fullscreenEnabled
+	var elem = $("#main-form");
+	if (elem.requestFullscreen) {
+	  elem.requestFullscreen();
+	} else if (elem.msRequestFullscreen) {
+	  elem.msRequestFullscreen();
+	} else if (elem.mozRequestFullScreen) {
+	  elem.mozRequestFullScreen();
+	} else if (elem.webkitRequestFullscreen) {
+	  elem.webkitRequestFullscreen();
+	}
 }
 
 
@@ -307,6 +318,11 @@ $(document).ready(function() {
 	 				}
 					
 					);
+					document.addEventListener("keydown", function(e) {
+					  if (e.keyCode == 13) {
+					    toggleFullScreen();
+					  }
+					}, false);
 	$("#time-2-read").val(time_to_read)				
 	$("#time-2-read").bind("change",function(e){
 		time_to_read = $("#time-2-read").val()
@@ -368,7 +384,30 @@ function receivedText(loading) {
 
 
 
-
+	function toggleFullScreen() {
+	  if (!document.fullscreenElement &&    // alternative standard method
+	      !document.mozFullScreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement ) {  // current working methods
+	    if (document.documentElement.requestFullscreen) {
+	      document.documentElement.requestFullscreen();
+	    } else if (document.documentElement.msRequestFullscreen) {
+	      document.documentElement.msRequestFullscreen();
+	    } else if (document.documentElement.mozRequestFullScreen) {
+	      document.documentElement.mozRequestFullScreen();
+	    } else if (document.documentElement.webkitRequestFullscreen) {
+	      document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+	    }
+	  } else {
+	    if (document.exitFullscreen) {
+	      document.exitFullscreen();
+	    } else if (document.msExitFullscreen) {
+	      document.msExitFullscreen();
+	    } else if (document.mozCancelFullScreen) {
+	      document.mozCancelFullScreen();
+	    } else if (document.webkitExitFullscreen) {
+	      document.webkitExitFullscreen();
+	    }
+	  }
+	}
 
 
 
