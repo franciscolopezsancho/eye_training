@@ -9,8 +9,14 @@ FastReader.prototype.take_text = function(paragraph,amount,begining) {
 	var numWords = amount
 	var sci = this.stickyCarriageIndex(paragraph,begining)
 	if(begining){
-		if(sci >-1 && sci < this.indexOfRec(paragraph,numWords," ")){numWords = amount - 1}
+		if(sci >-1 && sci < this.indexOfRec(paragraph,numWords," ")){
+			//change carriege for blank
+			var replaced = paragraph.substr(0, sci) + " " + paragraph.substr(sci+" ".length);
+		return paragraph.substring(0,this.indexOfRec(replaced,numWords," "))}else{
+			//numWords = amount - 1}
+		
 		return paragraph.substring(0,this.indexOfRec(paragraph,numWords," "))
+	}
 	}else{
 		//if not begining then end is supossed
 		if(sci >-1 && sci > this.lastIndexOfRec(paragraph,numWords," ")){numWords = amount - 1}
