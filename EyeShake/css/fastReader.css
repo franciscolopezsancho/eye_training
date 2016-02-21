@@ -1,5 +1,5 @@
 #main_form {
-	background-color: black;	
+	background-color:  #403F3A;	
 	height:95%;
 	/*overflow-y:hidden;*/
 	
@@ -11,25 +11,14 @@
 input {
 	width:30px;
 }
-.panel {
-		background-color: black;	
-}
 
-.panel.panel-default div{
-		background-color: black;	
-}
 
-.panel div {
-	
-	background-color: black;	
-}
 
-body, html {height:100%;  background: black;
-}
 html body
 {
-  background: black;
-  background-color:black;
+  background:  #403F3A;
+  background-color: #403F3A;
+  color:rgba(245,222,179,0.76);
 /*overflow-y:hidden;*/
   
 }
@@ -43,34 +32,36 @@ html body
 	
 
 }
-.transparent {
-  color:#E3E7E7;
-}
+
 
 .upper {
 	top:0px;
 	height:30%;
 	overflow-y:scroll;
-	color:#44;
+	color:rgba(245,222,179,0.10);
 	width:100%;
 	text-align:justify;
 	
 }
 .upper-last-child {
-	background-color: black;
+	background-color:  #403F3A;
 	-webkit-animation-name: example; /* Chrome, Safari, Opera */
-    -webkit-animation-duration: 0.5s;
+    -webkit-animation-duration: 0.2s;
 }
 
 /* Standard syntax */
 @keyframes example {
-    from {background-color: #444444;}
-    to {background-color: black;}
+    from {background-color: rgb(245,222,179);}
+    to {background-color: #403F3A;}
+}
+
+@keyframes reader {
+    from {color: rgba(245,222,179,0.75);}
+    to {color: rgba(245,222,179,0);}
 }
 
 #marker {
 	margin-top:40px;
-	color:#DDD;
 	margin-bottom:40px;
 	height:50px;
 	
@@ -131,7 +122,7 @@ html body
 .downer {
 	height:55%;
 	overflow:scroll;
-	color:#44;
+	color:rgba(245,222,179,0.10);
 	width:100%;	
 	text-align:justify;
 
@@ -142,7 +133,8 @@ html body
 
 
 .period {
-		color:#F3C974;
+		-webkit-animation-name: reader; /* Chrome, Safari, Opera */
+	    -webkit-animation-duration: 1s;
 }
 .paragraph {
 	background-color:red;

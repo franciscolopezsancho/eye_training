@@ -77,12 +77,10 @@ FastReader.prototype.stickyCarriageIndexRecursive = function(paragraph){
 	return scirAcc(paragraph,paragraph.search("\n\\S"))
 }
 
+var 	marks = ["\n","."," (",") ",",",":","?"," '","' ",";"]
 
-FastReader.prototype.redistributing_up = function (from,to,amount,marks){	
-if(!marks){
-	marks = ["\n","."," (",") ",",",":","?"," '","' "]
-	//marks = ["\n","."]
-}
+FastReader.prototype.redistributing_up = function (from,to,amount	){	
+
 	//create new objects!!!! make it functional
 	var text = this.take_text(from.text(),amount,true)	
 	this.update_to(to,text,marks)
@@ -187,40 +185,21 @@ FastReader.prototype.update_to = function(to,text,marks,down){
                  to.append('<p id="'+to.children().length+'"></p>')
 		}	
 		var child = to.children().last()
-	if(down){child = to.children().first()}
 
 	if(to.children().length == 0 ){
-		if(down){
-	    	if(text.indexOf("\n")>-1){
-				if(text.substring(text.indexOf("\n")+1) != ""){
-					to.prepend('<p>'+text.substring(text.indexOf("\n")+1)+'</p>')	
-				
-				}
-	        	to.prepend('<p>'+text.substring(0,text.indexOf("\n")+1)+'</p>')		
-			}else{
-				to.append('<p>'+text+'</p>') 					
-			}
-		}else{
+		
 			to.append('<p id="0">'+this.substring_with_mark(text,minIndex)+'</p>') 		
-			}
+			
 	}else{
-		if(down){
-	    	if(text.indexOf("\n")>-1){
-			to.children().first().text(text.substring(text.indexOf("\n")+1)+child.text())	
-	        to.prepend('<p>'+text.substring(0,text.indexOf("\n")+1)+'</p>')					
-			}else{
-			child.text(text+child.text())			
-		}}else{
+		
 		child.text(child.text()+this.substring_with_mark(text,minIndex))
 	    
-		}
+		
 	}
 
 	
 	 
-	if(down){
-    
-	}else{
+	
     
     if(to.children().last().text().indexOf("\n")>-1){
                  to.append('<p id="'+to.children().length+'"></p>')
@@ -230,28 +209,13 @@ FastReader.prototype.update_to = function(to,text,marks,down){
     // if(to.children().last().text().indexOf("\n")>-1){
  //   -               to.append('<p></p>')
  // 		}	
-}
+
 
 FastReader.prototype.update_from = function(from,marks,amount,down){
 	var child = from.children().first()
 	if(down){child = from.children().last()}
 	var text = child.text()
-if(down){
-	var numWords = text.trim().split(" ").length
-	if(text.indexOf("\n") != -1 && text.indexOf("\n") != (text.length-1)){
-		numWords = numWords + 1
-	} 
-if(numWords < amount){
-		from.children().last().remove()
-		this.update_from(from,marks,amount - numWords,true)
-}else
-if(numWords == amount){
-		from.children().last().remove()
-		return
-}else{
-	child.text(this.delete_text(text,amount,false))	
-	return
-}}
+
 	var foundMark = this.find_mark(text,marks)
 	if(foundMark < this.indexOfRec(text,amount," ")){
 		child.text(text.substring(foundMark+1))			
@@ -317,13 +281,7 @@ FastReader.prototype.substring_with_mark = function(text,markIndex,down){
 
 
 
-// FastReader.prototype.deal_with_marks_to(to,text){
-//
-// }
 
-
-//make blink reader on punto
-//make blink upper on punto y aparte
 
 
 
