@@ -64,20 +64,59 @@ function loadBook(text) {
     $("#bottom-container").children().remove()
     $("#all-container").children().remove()
     $.each(text.split("\n"), function(index, paragraph) {
-        $("#bottom-container").append("<p id=" + index + ">" + paragraph + "\n" + "</p>")
+       // $("#bottom-container").append("<p id=" + index + ">" + paragraph + "\n" + "</p>")
         $("#all-container").append("<p id=" + index + ">" + paragraph + "\n" + "</p>")
     })
-    $("#all-container").children().bind("click", readerController.reset_focus);
+    $("#all-container").children().bind("click", partialLoadBook);
     $("#current").text("0")
     $("#goto").val("0")
     activateFullScreen();
 }
 
 
-function partialLoadBook(text,current,quantity){
-	for(var index = current;index < current + quantity;total++){
-    	$("#bottom-container").append($("#all-container").children().eq(index))	
+function partialLoadBook(){
+	$("#bottom-container").children().remove()
+	var curr = parseInt(this.getAttribute("id"))
+    $("#current").text(curr)
+    $("#goto").val(curr)
+	
+	
+	
+	//fill bottom
+	for(var index = curr;index < curr + 100;index++){
+    	$("#bottom-container").append("<p id=" + index + ">" +$("#all-container").children().eq(index).text()+ "</p>")	
 	}
+	//fill upper
+	for(var index = (parseInt(curr) -1);index + 20  > curr ;index--){
+    	$("#upper-container").prepend("<p id=" + index + ">" +$("#all-container").children().eq(index).text()+ "</p>")	
+	}
+	//$("#upper-container").children().bind("click",this.reset_focus	)
+	//$("#bottom-container").children().bind("click",this.reset_focus	)
+	var dif = $("#upper-container")
+	dif.scrollTop(dif[0].scrollHeight)
+	var duf = $("#bottom-container")
+	duf.scrollTop(0)
+	start();
+	//e
+}
+
+function keepUpperFitted(margin){
+
+if($("#upper-container").children().length > margin){
+	$("#upper-container").children().first().remove()
+	}
+
+
+}
+
+
+function keepBottomFitted(check,fulfil){
+if($("#bottom-container").children().length < check){
+var last = parseInt($("#bottom-container").children().last().attr("id"))+1;	
+for(var index = last;index < last + fulfil;index++){
+	$("#bottom-container").append("<p id=" + index + ">" +$("#all-container").children().eq(index).text()+ "</p>")	
+}
+}
 }
 
 
@@ -152,6 +191,7 @@ function blink(marks) {
             $("#reader-container").append("<p>" + paragraphs[p] + "</p>")
         }
         var endOfSentence = addPeriodClass();
+		keepBottomFitted(20,50)
         delay($("#reader-container").text(), reader2Upper, amount, time_to_read, marks, endOfSentence)
     }
 
@@ -192,12 +232,13 @@ function reader2Upper(amount, marks) {
     $("#reader-container").append("<p>" + paragraphsText + "</p>")
     readerController.redistributing_up($("#reader-container"), $("#upper-container"), amount, marks)
     addParagraphFlash($("#upper-container"))
-    $("#current").text($("#upper-container").children().last().attr("id"))
+    $("#current").text($("#bottom-container").children().first().attr("id"))
 
     var dif = $("#upper-container")
     dif.scrollTop(dif[0].scrollHeight)
     var duf = $("#bottom-container")
     duf.scrollTop(0)
+	keepUpperFitted(20)
     if (going_up)(blink());
 
 }
@@ -229,7 +270,7 @@ function addMark() {
 
 function addPeriodClass() {
     var text = $("#reader-container").children().last().text();
-    if (text.indexOf(".") == (text.length - 1) || text.indexOf("\n") == (text.length - 1)) {
+    if (text.indexOf(".") == (text.length - 1) || text.indexOf("\n") == (text.length - 1) || text.indexOf("?") == (text.length - 1)) {
         $("#reader-container").children().addClass("period")
         return true
     }
