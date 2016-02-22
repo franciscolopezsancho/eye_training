@@ -4,7 +4,7 @@
 function FastReader() {
 }
 
-
+//TODO find if stickyMarck ()
 FastReader.prototype.take_text = function(paragraph,amount,begining) {
 	var numWords = amount
 	var sci = this.stickyCarriageIndex(paragraph,begining)
@@ -23,7 +23,7 @@ FastReader.prototype.take_text = function(paragraph,amount,begining) {
 		return paragraph.substring(this.lastIndexOfRec(paragraph,numWords," "))	
 	}
 };
-
+//TODO shouln't I be passing first take_text then stickyCharacter then anything else??
 
 FastReader.prototype.delete_text = function(paragraph,amount,begining) {
 	var numWords = amount
@@ -101,51 +101,7 @@ FastReader.prototype.redistributing_down = function (from,to,amount){
 
 }
 
-FastReader.prototype.reset_focus = function (event){
-event.stopPropagation();
-    if(stopped){
-	var clicked = this
-	var last = $("#upper-container").children().last()
-	var first = $("#bottom-container").children().first()
-	
-			var t1 = new Date()
 
-	$.each($("#bottom-container").children(),function(index,p)
-	{
-	if(parseInt(clicked.id) > parseInt(p.id)){
-		if(parseInt(p.id) == $("#upper-container").children().last().attr("id")){
-			//merge them
-			var combinedText = $("#upper-container").children().last().text()+$(p).text()
-			var id = p.id
-		$(p).remove()
-		$("#upper-container").children().last().remove()
-		$("#upper-container").append("<p id="+id+">"+combinedText+"</p>")
-		}else{
-			$("#upper-container").append(p)
-
-		}
-	}else{
-		console.log("total bottom containter : "+(new Date().getTime()-t1.getTime())/1000)
-		return false}
-	});
-			 t1 = new Date()
-
-	$.each($("#upper-container p").get().reverse(),function(index,p){
-	if(parseInt(clicked.id) <= parseInt(p.id)){$("#bottom-container").prepend(p)}else{
-		console.log("total up containter : "+(new Date().getTime()-t1.getTime())/1000)
-		return false}
-	});
-	//$("#upper-container").children().bind("click",this.reset_focus	)
-	//$("#bottom-container").children().bind("click",this.reset_focus	)
-	var dif = $("#upper-container")
-	dif.scrollTop(dif[0].scrollHeight)
-	var duf = $("#bottom-container")
-	duf.scrollTop(0)
-	start();
-	//event.stopPropagation();
-	}
-     // if you don't want event to bubble up
-	}
 
 FastReader.prototype.up_to_reader  = function(upper,reader,amount){
 	var taken = this.take_text(upper.children().last().text(),amount,false)

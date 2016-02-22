@@ -206,11 +206,11 @@ function delay(readerText, callback, amount, time_to_read, marks, endOfSentence)
     } else if (endOfSentence) {
         setTimeout(function() {
             callback(amount, marks)
-        }, time_to_read * 4);
+        }, time_to_read * 3);
     } else if (readerText.indexOf("\n") > -1 && readerText.indexOf(".") == -1 && readerText.trim().length > 2) {
         setTimeout(function() {
             callback(amount, marks)
-        }, time_to_read * 4);
+        }, time_to_read * 3);
     } else if (readerText.indexOf("?") > -1 || readerText.indexOf(",") > -1 || readerText.indexOf("(") > -1 || readerText.indexOf(")") > -1 || readerText.indexOf(":") > -1) {
         setTimeout(function() {
             callback(amount)
