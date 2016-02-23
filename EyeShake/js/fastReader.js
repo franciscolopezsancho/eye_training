@@ -12,6 +12,7 @@ FastReader.prototype.take_text = function(paragraph,amount,begining) {
 		if(sci >-1 && sci < this.indexOfRec(paragraph,numWords," ")){
 			//change carriege for blank
 			var replaced = paragraph.substr(0, sci) + " " + paragraph.substr(sci+" ".length);
+			//go until next word
 		return paragraph.substring(0,this.indexOfRec(replaced,numWords," "))}else{
 			//numWords = amount - 1}
 		
@@ -23,6 +24,18 @@ FastReader.prototype.take_text = function(paragraph,amount,begining) {
 		return paragraph.substring(this.lastIndexOfRec(paragraph,numWords," "))	
 	}
 };
+
+
+FastReader.prototype.find_before_next_word = function(text,from) {
+	var nextAlphanum = text.substring(from).search("[A-Za-z0-9]")
+	if(nextAlphanum == -1) return text.length
+	var lastCarriage = text.substring(from,from+nextAlphanum).lastIndexOf("\n")
+	var lastBlank = text.substring(from,from+nextAlphanum).lastIndexOf(" ")
+	if(lastCarriage > lastBlank){
+		return lastCarriage+from}else{
+		return lastBlank+from}
+	
+}
 //TODO shouln't I be passing first take_text then stickyCharacter then anything else??
 
 FastReader.prototype.delete_text = function(paragraph,amount,begining) {
@@ -137,6 +150,8 @@ FastReader.prototype.melt = function(node){
 
 FastReader.prototype.update_to = function(to,text,marks,down){
 	var minIndex = this.find_mark(text,marks)
+	
+	var beforeNextWord = this.find_before_next_word(text,minIndex)
 		if(to.children().last().text().indexOf("\n")>-1){
                  to.append('<p id="'+to.children().length+'"></p>')
 		}	
@@ -144,11 +159,11 @@ FastReader.prototype.update_to = function(to,text,marks,down){
 
 	if(to.children().length == 0 ){
 		
-			to.append('<p id="0">'+this.substring_with_mark(text,minIndex)+'</p>') 		
+			to.append('<p id="0">'+this.substring_with_mark(text,beforeNextWord)+'</p>') 		
 			
 	}else{
 		
-		child.text(child.text()+this.substring_with_mark(text,minIndex))
+		child.text(child.text()+this.substring_with_mark(text,beforeNextWord))
 	    
 		
 	}
@@ -169,12 +184,15 @@ FastReader.prototype.update_to = function(to,text,marks,down){
 
 FastReader.prototype.update_from = function(from,marks,amount,down){
 	var child = from.children().first()
-	if(down){child = from.children().last()}
 	var text = child.text()
+	
+	
 
 	var foundMark = this.find_mark(text,marks)
-	if(foundMark < this.indexOfRec(text,amount," ")){
-		child.text(text.substring(foundMark+1))			
+	var beforeNextWord = this.find_before_next_word(text,foundMark)
+	
+	if(beforeNextWord < this.indexOfRec(text,amount," ")){
+		child.text(text.substring(beforeNextWord+1))			
 	}else{
 		child.text(this.delete_text(text,amount,true))	
 	}

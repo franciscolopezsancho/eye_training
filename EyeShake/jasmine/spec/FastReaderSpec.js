@@ -48,9 +48,23 @@ it("1.5.2 should be able to take words from the end of even with dodgy blank in 
 it("1.5.3 should be able to take words from the end of even with dodgy blank in the the middle but when ask for words before that blank", function() {
     expect("o producto realizado \nA lo largo del ").toEqual(reader.take_text("La historia del arte es \nEntendido como cualquier actividad o producto realizado \nA lo largo del ",8,false));
   });
+  
+  	
 			
 
  
+  it("1.6 should find before next word when ",function(){
+  var phrase = "Era del atun!.!!!. Carajo!";
+  expect(phrase.indexOf("C")-1).toEqual(reader.find_before_next_word("Era del atun!.!!!. Carajo!",13))
+  });
+  
+  it("1.6 should find before next word when ",function(){
+  var phrase = "Era del atun!.!!!. Carajo!";
+  expect(phrase.indexOf("C")-1).toEqual(reader.find_before_next_word("Era del atun!. . . Carajo!",13))
+  });
+
+
+  " for.’\n\nBourne gripped the wom"
 
 
   it("2 should be able to move 3 first words from 'should be able to play a Song' to 'almos nothing',adding it before and keep the rest", function() {
@@ -146,19 +160,19 @@ var html = $('<div class="book">')
 	
   });
   
-  it("11 should be able to redistribute from reader to bottom to bottom erase bottom paragraph if empty", function() {
- var html = $('<div class="book">')		
-	  				html.append('<div id="upper-container" class="upper"><p>Something</p></div>')		
- 					html.append('<div id="text-bucket-styled" class="reader"><p>Im looking at </p></div>')	
- 					html.append('<div id="text-bucket-end" class="downer"><p>Something dude was </p></div>')	
- 	  				html.append('</div>')
-	  var focus = $("#text-bucket-styled",html);
-	  var bottom = $("#text-bucket-end",html);
-	  reader.redistributing_down(focus,bottom,3)
-    expect("Im looking at Something dude was ").toEqual(bottom.text());
-    expect(0).toEqual(focus.children().length);
-	
-  });
+  // it("11 should be able to redistribute from reader to bottom to bottom erase bottom paragraph if empty", function() {
+ // var html = $('<div class="book">')
+ // 	  				html.append('<div id="upper-container" class="upper"><p>Something</p></div>')
+ // 					html.append('<div id="text-bucket-styled" class="reader"><p>Im looking at </p></div>')
+ // 					html.append('<div id="text-bucket-end" class="downer"><p>Something dude was </p></div>')
+ // 	  				html.append('</div>')
+ // 	  var focus = $("#text-bucket-styled",html);
+ // 	  var bottom = $("#text-bucket-end",html);
+ // 	  reader.redistributing_down(focus,bottom,3)
+ //    expect("Im looking at Something dude was ").toEqual(bottom.text());
+ //    expect(0).toEqual(focus.children().length);
+ //
+ //  });
 
   // it("12 should be able to redistribute from reader to upper creating new paragraph because carriage", function() {
  // var html = $('<div class="book">'+
@@ -215,43 +229,43 @@ var html = $('<div class="book">')
 //   	expect("Something dude was").toEqual(upper.children().last().text());
 //
 //   });
-it("13.1 should be able to update_to some empty node  when down", function() {
-  
-  var node = $('<div id="text-bucket-end"></div>')
-  
-  reader.update_to(node,"actividad o producto realizado \nA lo largo del",["\n"],true)
-  expect("A lo largo del").toEqual(node.children().last().text());
-  expect("actividad o producto realizado \n").toEqual(node.children().first().text());
-  
-  
-  
-  });
-  
-  it("13.2 should be able to update_to some empty node  when down", function() {
-  
-    var node = $('<div id="text-bucket-end"></div>')
-  
-    reader.update_to(node,"La historia del",["\n"],true)
-    expect("La historia del").toEqual(node.children().first().text());
-    expect(1).toEqual(node.children().length);
-  
-  
-  
-    });
-	
-    it("13.3 should be able to update_to some empty node  when down just passing after carriage", function() {
-  
-      var node = $('<div id="text-bucket-end"><p>tiempo el arte se ha clasificado</div>')
-  
-      reader.update_to(node,"actividad o producto realizado \n a lo largo del ",["\n"],true)
-      expect("actividad o producto realizado \n").toEqual(node.children().first().text());
-      expect(" a lo largo del tiempo el arte se ha clasificado").toEqual(node.children().last().text());
-	  
-      expect(2).toEqual(node.children().length);
-  
-  
-  
-      });
+// it("13.1 should be able to update_to some empty node  when down", function() {
+//
+//   var node = $('<div id="text-bucket-end"></div>')
+//
+//   reader.update_to(node,"actividad o producto realizado \nA lo largo del",["\n"],true)
+//   expect("A lo largo del").toEqual(node.children().last().text());
+//   expect("actividad o producto realizado \n").toEqual(node.children().first().text());
+//
+//
+//
+//   });
+//
+  // it("13.2 should be able to update_to some empty node  when down", function() {
+ //
+ //    var node = $('<div id="text-bucket-end"></div>')
+ //
+ //    reader.update_to(node,"La historia del",["\n"],true)
+ //    expect("La historia del").toEqual(node.children().first().text());
+ //    expect(1).toEqual(node.children().length);
+ //
+ //
+ //
+ //    });
+ //
+ //    it("13.3 should be able to update_to some empty node  when down just passing after carriage", function() {
+ //
+ //      var node = $('<div id="text-bucket-end"><p>tiempo el arte se ha clasificado</div>')
+ //
+ //      reader.update_to(node,"actividad o producto realizado \n a lo largo del ",["\n"],true)
+ //      expect("actividad o producto realizado \n").toEqual(node.children().first().text());
+ //      expect(" a lo largo del tiempo el arte se ha clasificado").toEqual(node.children().last().text());
+ //
+ //      expect(2).toEqual(node.children().length);
+ //
+ //
+ //
+ //      });
 
   
   it("14 should be able to redistribute multiple times", function() {
@@ -342,8 +356,8 @@ it("13.1 should be able to update_to some empty node  when down", function() {
 	   expect("").toEqual(readerr.text());
 	   
  	  reader.redistributing_up(bottom,readerr,3)	  
-       expect(" asi.").toEqual(readerr.children().first().text());
-       expect(" Cuando se quiso dar cuenta se acabo \n").toEqual(bottom.children().first().text());
+       expect(" asi. ").toEqual(readerr.children().first().text());
+       expect("Cuando se quiso dar cuenta se acabo \n").toEqual(bottom.children().first().text());
      
 	  
 	  
@@ -374,8 +388,8 @@ it("13.1 should be able to update_to some empty node  when down", function() {
 	   expect("").toEqual(readerr.text());
 	   
  	  reader.redistributing_up(bottom,readerr,3)	  
-       expect(" asi,").toEqual(readerr.children().first().text());
-       expect(" Cuando se quiso dar cuenta se acabo \n").toEqual(bottom.children().first().text());
+       expect(" asi, ").toEqual(readerr.children().first().text());
+       expect("Cuando se quiso dar cuenta se acabo \n").toEqual(bottom.children().first().text());
 	
   });
 

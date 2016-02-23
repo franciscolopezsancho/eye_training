@@ -3,7 +3,7 @@ $.getScript("js/fastReader.js", function() {});
 var readerController = new FastReader()
 var viewAke = new View()
 
-var time_to_read = 150;
+var time_to_read = 222;
 var number_words = 3;
 var words_to_watch;
 var averageLength = 8
@@ -270,7 +270,7 @@ function addMark() {
 
 function addPeriodClass() {
     var text = $("#reader-container").children().last().text();
-    if (text.indexOf(".") == (text.length - 1) || text.indexOf("\n") == (text.length - 1) || text.indexOf("?") == (text.length - 1)) {
+    if (text.indexOf(".") != -1 || text.indexOf("\n") != -1 || text.indexOf("?") != -1 ) {
         $("#reader-container").children().addClass("period")
         return true
     }
