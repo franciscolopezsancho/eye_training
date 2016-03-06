@@ -4,7 +4,7 @@
 function FastReader() {
 }
 
-//TODO find if stickyMarck ()
+//TODO find words with hyphen
 FastReader.prototype.take_text = function(paragraph,amount,begining) {
 	var numWords = amount
 	var sci = this.stickyCarriageIndex(paragraph,begining)
@@ -90,7 +90,7 @@ FastReader.prototype.stickyCarriageIndexRecursive = function(paragraph){
 	return scirAcc(paragraph,paragraph.search("\n\\S"))
 }
 
-var 	marks = ["\n","."," (",") ",",",":","?"," '","' ",";"]
+var 	marks = ["\n","."," (",") ",",","?"," '","' ",";"]
 
 FastReader.prototype.redistributing_up = function (from,to,amount	){	
 

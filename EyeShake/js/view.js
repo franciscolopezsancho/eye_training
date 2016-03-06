@@ -198,20 +198,21 @@ function blink(marks) {
 }
 
 function delay(readerText, callback, amount, time_to_read, marks, endOfSentence) {
-    var isBegining = !lastWordIsEndOfSentece
-    if (lastWordIsEndOfSentece) {
+    var isBegining = lastWordIsEndOfSentece
+    if (isBegining) {
+		lastWordIsEndOfSentece = false
         setTimeout(function() {
             callback(amount, marks)
         }, time_to_read * 2);
     } else if (endOfSentence) {
         setTimeout(function() {
             callback(amount, marks)
-        }, time_to_read * 3);
+        }, time_to_read * 2.5);
     } else if (readerText.indexOf("\n") > -1 && readerText.indexOf(".") == -1 && readerText.trim().length > 2) {
         setTimeout(function() {
             callback(amount, marks)
-        }, time_to_read * 3);
-    } else if (readerText.indexOf("?") > -1 || readerText.indexOf(",") > -1 || readerText.indexOf("(") > -1 || readerText.indexOf(")") > -1 || readerText.indexOf(":") > -1) {
+        }, time_to_read * 2);
+    } else if (readerText.indexOf(";") > -1 || readerText.indexOf(",") > -1 || readerText.indexOf("(") > -1 || readerText.indexOf(")") > -1 || readerText.indexOf(":") > -1) {
         setTimeout(function() {
             callback(amount)
         }, time_to_read * 1.5);
