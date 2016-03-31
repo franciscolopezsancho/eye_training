@@ -458,6 +458,18 @@ it("16.1 should find first index of a mark (like period,carriage,parenthesis,com
   
   
         });
+		
+        it("16.6 should find that one dot among alphanumerics and wierd signs is not a mark, is a reference", function() {
+          		expect(true).toEqual(reader.isReference("as a social good.’3 Historians ",16))
+  
+  
+          });
+		  
+          it("16.6 should find that one dot among alphanumerics and wierd signs is not a mark, is a reference", function() {
+            		expect(true).toEqual(reader.isReference("as a social (210).3 Historians ",17))
+  
+  
+            });
  
 it("17 should leave the same when don't find any mark (like period,carriage,parenthesis,comma)", function() {
   		var text = "era del aturn"
