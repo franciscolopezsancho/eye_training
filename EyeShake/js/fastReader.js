@@ -217,7 +217,7 @@ FastReader.prototype.find_mark = function(text,marks){
 	for(i in marks){
 		var foundAt = text.indexOf(marks[i])
 		if(foundAt != -1  && foundAt < minFoundAt){
-			if(!this.isAcronym(text,foundAt) && !this.isDigit(text,foundAt)){
+			if(!this.isAcronym(text,foundAt) && !this.isDigit(text,foundAt )&& !this.isReference(text,foundAt)){
 				minFoundAt = foundAt				
 			}
 		}
@@ -233,6 +233,14 @@ FastReader.prototype.isAcronym = function(text,index){
 		if(text.charAt(index - 2) == " ") return true
 	}
 	return false
+}
+
+FastReader.prototype.isReference= function(text,index){
+if(text.charAt(index) == "."){
+	if(text.charAt(index - 1).match(/[a-z]/i) && $.isNumeric(text.charAt(index + 1))) return true
+	if(text.charAt(index - 1).match(/[a-z]/i) && text.charAt(index + 1) == "[") return true
+}
+return false
 }
 
 FastReader.prototype.isDigit = function(text,index){
