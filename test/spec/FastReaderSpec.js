@@ -49,19 +49,51 @@ it("1.5.3 should be able to take words from the end of even with dodgy blank in 
     expect("o producto realizado \nA lo largo del ").toEqual(reader.take_text("La historia del arte es \nEntendido como cualquier actividad o producto realizado \nA lo largo del ",8,false));
   });
   
+  it("1.5.4 should find that one dot among alphanumerics is not a mark, is a reference and take all text", function() {
+    		expect("as a social good.33").toEqual(reader.take_text("as a social good.33 Historians ",4,true))
+
+
+    });
+	
+    it("1.5.4.1 should find that one dot among alphanumerics is not a mark, is a reference and take all text", function() {
+      		expect("as a social good.33 Historians").toEqual(reader.take_text("as a social good.33 Historians ",5,true))
+
+
+      });
+  
   	
 			
 
  
-  it("1.6 should find before next word when ",function(){
+  it("1.6 should find, after the index, the position before the next word, avoiding wierd marks",function(){
   var phrase = "Era del atun!.!!!. Carajo!";
-  expect(phrase.indexOf("C")-1).toEqual(reader.find_before_next_word("Era del atun!.!!!. Carajo!",13))
+  	expect(phrase.indexOf("C")-1).toEqual(reader.find_before_next_word("Era del atun!.!!!. Carajo!",13))
   });
   
-  it("1.6 should find before next word when ",function(){
+  it("1.6.1 should find, after the index, the position before the next word, avoiding dots",function(){
   var phrase = "Era del atun!.!!!. Carajo!";
-  expect(phrase.indexOf("C")-1).toEqual(reader.find_before_next_word("Era del atun!. . . Carajo!",13))
+  	expect(phrase.indexOf("C")-1).toEqual(reader.find_before_next_word("Era del atun!. . . Carajo!",13))
   });
+  
+  it("1.6.1 should find, after the index, the position before the next word, going to the end if no more words",function(){
+  var phrase = " or Salamanca men.17";
+  	expect(phrase.length).toEqual(reader.find_before_next_word(" or Salamanca men.17",18))
+  });
+  
+  
+  
+  it("1.6.2 should find after next word when ",function(){
+  var phrase = "From an institutional point of view,-the enlightment";
+  	expect(phrase.indexOf(",")+5).toEqual(reader.find_after_next_word("From an institutional point of view,-the enlightment",34))
+  });
+  
+  it("1.6.3 should find end of phrase when after next word is a reference ",function(){
+  var phrase = " or Salamanca men.17"
+  	expect(phrase.length).toEqual(reader.find_after_next_word(" or Salamanca men.17",17))
+  });
+  
+
+  			
 
 
   " for.’\n\nBourne gripped the wom"
@@ -418,16 +450,22 @@ var html = $('<div class="book">')
   });
 
   it("16 should find first index of a mark (like period,carriage,parenthesis,comma)", function() {
-  		expect(12).toEqual(reader.find_mark("era del atun. \n",["\n","."]))
+  		expect(13).toEqual(reader.find_mark("era del atun. \n",["\n","."]))
   
   
   });
 
 it("16.1 should find first index of a mark (like period,carriage,parenthesis,comma)", function() {
-  		expect(12).toEqual(reader.find_mark("era del atun. \n",["\n","."]))
+  		expect(13).toEqual(reader.find_mark("era del atun. \n",["\n","."]))
   
   
   });
+  
+  it("16.1.1 should   find mark but realize is a period", function() {
+    		var text = " or Salamanca men.17"
+   		expect(text.length).toEqual(reader.find_mark(text,["\n","."])) 
+  
+    });
 
   it("16.2 should find that one letter and one dot is not a stop mark", function() {
     		expect(true).toEqual(reader.isAcronym("d a. C.)",3))
@@ -447,11 +485,21 @@ it("16.1 should find first index of a mark (like period,carriage,parenthesis,com
   
     });
 	
+	
+	
+	" or Salamanca men.17"
+	
     it("16.5 should find that one dot among alphanumerics is not a mark, is a reference", function() {
       		expect(true).toEqual(reader.isReference("as a social good.3 Historians ",16))
   
   
       });
+	  
+      it("16.5.1 should find that one dot among alphanumerics is not a mark, is a reference", function() {
+        		expect(true).toEqual(reader.isReference("as a social good.33 Historians ",16))
+  
+  
+        });
 	  
       it("16.6 should find that one dot among alphanumerics and bracket is not a mark, is a reference", function() {
         		expect(true).toEqual(reader.isReference("as a social good.[3] Historians ",16))
@@ -459,23 +507,35 @@ it("16.1 should find first index of a mark (like period,carriage,parenthesis,com
   
         });
 		
-        it("16.6 should find that one dot among alphanumerics and wierd signs is not a mark, is a reference", function() {
+        it("16.7 should find that one dot among alphanumerics and wierd signs is not a mark, is a reference", function() {
           		expect(true).toEqual(reader.isReference("as a social good.’3 Historians ",16))
   
   
           });
 		  
-          it("16.6 should find that one dot among alphanumerics and wierd signs is not a mark, is a reference", function() {
+          it("16.8 should find that one dot among alphanumerics and wierd signs is not a mark, is a reference", function() {
             		expect(true).toEqual(reader.isReference("as a social (210).3 Historians ",17))
   
   
             });
+			
+            it("16.9 should find that one dot among alphanumerics and wierd signs is not a mark, is a reference", function() {
+              		expect(true).toEqual(reader.isReference("‘invented’ or ‘constructed’.4 But at ",27))
+  
+  
+              });
+			  
  
 it("17 should leave the same when don't find any mark (like period,carriage,parenthesis,comma)", function() {
   		var text = "era del aturn"
- 		expect(text).toEqual(text.substring(reader.find_mark(text,["\n","."]))) 
+ 		expect(text).toEqual(text.substring(0,reader.find_mark(text,["\n","."]))) 
   
   });
+  
+
+  
+  
+  
 
   it("18 should be able to redistribute from bottom to reader keeping deleting text from bottom propertly", function() {
  var html = $('<div class="book">')		

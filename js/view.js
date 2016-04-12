@@ -3,7 +3,7 @@ $.getScript("js/fastReader.js", function() {});
 var readerController = new FastReader()
 var viewAke = new View()
 
-var time_to_read = 222;
+var time_to_read = 300;
 var number_words = 3;
 var words_to_watch;
 var averageLength = 8
