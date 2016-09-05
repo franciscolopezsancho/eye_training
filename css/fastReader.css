@@ -93,7 +93,7 @@ html body
 	width:100%;
 }
 
-#current {
+.page-position {
 	float:right;
 	padding-right:10px;
 }

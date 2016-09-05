@@ -123,50 +123,10 @@ FastReader.prototype.redistributing_up = function(from, to, amount) {
 }
 
 
-FastReader.prototype.redistributing_down = function(from, to, amount) {
-    //create new objects!!!! make it functional
-    var text = this.take_text(from.text(), amount, false)
-    this.update_to(to, text, ["\n"], true)
-        //create new objects!!!! make it functional
-    this.update_from(from, [], amount, true)
 
 
 
-}
 
-
-
-FastReader.prototype.up_to_reader = function(upper, reader, amount) {
-    var taken = this.take_text(upper.children().last().text(), amount, false)
-    var parag = reader.children().first()
-    if (parag.length == 0) {
-        reader.append('<p></p>')
-        parag = reader.children().first()
-    }
-    parag.text(taken + parag.text())
-
-    if (taken.split(" ").length < amount) {
-        upper.children().last().remove()
-        var words = taken.trim().split(" ").length
-        if (taken.indexOf("\n") > -1) {
-            words = words + 1
-        }
-        upper.children().last().text(this.delete_text(upper.children().last().text(), words, false))
-        this.up_to_reader(upper, reader, amount - words)
-    } else if (taken.split(" ") == amount) {
-        upper.children().last().remove()
-        upper.children().last().text(this.delete_text(upper.children().last().text(), amount, false))
-
-    } else {
-        upper.children().last().text(this.delete_text(upper.children().last().text(), amount, false))
-    }
-
-}
-FastReader.prototype.melt = function(node) {
-    var textContent = node.children().text()
-    node.children().remove()
-    node.append("<p>" + textContent + "</p>")
-}
 
 FastReader.prototype.update_to = function(to, text, marks, down) {
     var minIndex = this.find_mark(text, marks)
@@ -209,8 +169,17 @@ FastReader.prototype.update_from = function(from, marks, amount, down) {
     if (child.text() == "") {
         child.remove()
     }
+    this.clean_reader(from,"reader-container")
 }
 
+
+FastReader.prototype.clean_reader = function(from,readerName){
+    if(from.attr("id") == readerName){
+        from.children().remove()
+    }
+
+
+}
 
 
 

@@ -6,8 +6,8 @@ var viewAke = new View()
 var time_to_read = 300;
 var number_words = 3;
 var words_to_watch;
-var averageLength = 8
-var numWords = 3
+var averageLength = 5
+var numWords = 5
 var maxLength = averageLength * numWords
 var numLines = 2
 var counterWords = 0
@@ -68,6 +68,7 @@ function loadBook(text) {
         $("#all-container").append("<p id=" + index + ">" + paragraph + "\n" + "</p>")
     })
     $("#all-container").children().bind("click", partialLoadBook);
+    $("#total-paragraphs").text($("#all-container").children().length)
     $("#current").text("0")
     $("#goto").val("0")
     activateFullScreen();
@@ -134,7 +135,6 @@ function pickNumWords(from, amount) {
 function start() {
     stopped = false
     going_up = true
-    numWords = 3
     $("#loader").hide()
     $("#stats").show()
 
