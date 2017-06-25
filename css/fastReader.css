@@ -72,8 +72,9 @@ html body
 }
 
 #reader-container.reader p{
-	width:300px;
+	width:160px;
 	text-align:center;
+	text-align-last: center;
 	margin:0px;
 	font-size:medium;
 	font-family:verdana;
@@ -134,7 +135,7 @@ html body
 
 .period {
 		-webkit-animation-name: reader; /* Chrome, Safari, Opera */
-	    -webkit-animation-duration: 1s;
+	    -webkit-animation-duration: 2s;
 }
 .paragraph {
 	background-color:red;

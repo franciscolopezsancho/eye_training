@@ -4,11 +4,10 @@ var readerController = new FastReader()
 var viewAke = new View()
 
 var time_to_read = 300;
-var number_words = 3;
 var words_to_watch;
 var averageLength = 5
 var numWords = 5
-var maxLength = averageLength * numWords
+var maxLength = 25
 var numLines = 2
 var counterWords = 0
 var initTime = 0
@@ -121,11 +120,11 @@ for(var index = last;index < last + fulfil;index++){
 }
 
 
-function pickNumWords(from, amount) {
+View.prototype.pickNumWords = function(from, amount) {
     if (from.children().first().text().length == 0) return amount
     var allWords = readerController.take_text(from.children().first().text(), amount, true)
     if (allWords.length > maxLength) {
-        return pickNumWords(from, amount - 1)
+        return viewAke.pickNumWords(from, amount - 1)
     } else {
         return amount
     }
@@ -183,12 +182,13 @@ function blink(marks) {
         if (initTime == 0) {
             initTime = new Date()
         }
-        var amount = pickNumWords($("#bottom-container"), numWords)
+        var amount = viewAke.pickNumWords($("#bottom-container"), numWords)
         readerController.redistributing_up($("#bottom-container"), $("#reader-container"), amount, marks)
         var paragraphs = viewAke.redistribute($("#reader-container").text(), numLines)
         $("#reader-container").children().remove()
         for (p in paragraphs) {
             $("#reader-container").append("<p>" + paragraphs[p] + "</p>")
+			//-``. if paragraph is just one word an even then css -> align-text right
         }
         var endOfSentence = addPeriodClass();
 		keepBottomFitted(20,50)
@@ -197,25 +197,35 @@ function blink(marks) {
 
 }
 
+function isEmpty(text){
+return 
+}
+
 function delay(readerText, callback, amount, time_to_read, marks, endOfSentence) {
     var isBegining = lastWordIsEndOfSentece
     if (isBegining) {
-		lastWordIsEndOfSentece = false
-        setTimeout(function() {
+		if(readerText.trim() == 0){
+	        setTimeout(function() {
+	            callback(amount, marks)
+	        }, 0);
+		}else{
+			lastWordIsEndOfSentece = false
+        	setTimeout(function() {
             callback(amount, marks)
-        }, time_to_read * 2);
+        	}, time_to_read * 1);
+		}
     } else if (endOfSentence) {
         setTimeout(function() {
             callback(amount, marks)
-        }, time_to_read * 2.5);
+        }, time_to_read * 2);
     } else if (readerText.indexOf("\n") > -1 && readerText.indexOf(".") == -1 && readerText.trim().length > 2) {
         setTimeout(function() {
             callback(amount, marks)
-        }, time_to_read * 2);
+        }, time_to_read );
     } else if (readerText.indexOf(";") > -1 || readerText.indexOf(",") > -1 || readerText.indexOf("(") > -1 || readerText.indexOf(")") > -1 || readerText.indexOf(":") > -1) {
         setTimeout(function() {
             callback(amount)
-        }, time_to_read * 1.5);
+        }, time_to_read );
     } else {
         setTimeout(function() {
             callback(amount, marks)

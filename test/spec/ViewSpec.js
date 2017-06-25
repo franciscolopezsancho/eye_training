@@ -34,6 +34,14 @@ describe("View", function() {
      expect(["La historia"," del arte ","es muy chuli"]).toEqual(view.redistribute("La historia del arte es muy chuli",3));
    }); 
   
+   it("should pick exact num words by max lenght even when number of words asked for is more", function(){
+   var html = $('<div class="book">')		
+   				html.append('<div id="any">a lo largo del tiempo el arte se ha</div>')	
+ 				html.append('</div>')
+					
+ 		expect("a lo largo del tiempo el arte se").toEqual(view.pickNumWords($("any"),30))		
+  
+   });	
   
   
   

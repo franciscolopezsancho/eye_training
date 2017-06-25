@@ -110,7 +110,7 @@ FastReader.prototype.stickyCarriageIndexRecursive = function(paragraph) {
     return scirAcc(paragraph, paragraph.search("\n\\S"))
 }
 
-var marks = ["\n", ".", " (", ") ", ",", "?", " '", "' ", ";"]
+var marks = ["\n",".’",".'", ".", " (", ") ", , "?", " '", "' "," ‘","’ ",";",", "]
 
 FastReader.prototype.redistributing_up = function(from, to, amount) {
 
