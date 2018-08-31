@@ -8,7 +8,7 @@ var words_to_watch;
 var averageLength = 5
 var numWords = 6
 var maxLength = 30
-var numLines = 2
+var numLines = 3
 var counterWords = 0
 var initTime = 0
 var going_up = false
@@ -20,7 +20,7 @@ var lastWordIsEndOfSentece = false
 function View() {}
 
 
-//This will redistribute evenly text in reader paragraph 
+//This will redistribute evenly text in reader paragraph
 //in as many lines as commanded
 View.prototype.redistribute = function(text, lines) {
     //expects an array lines.length with strings
@@ -79,16 +79,16 @@ function partialLoadBook(){
 	var curr = parseInt(this.getAttribute("id"))
     $("#current").text(curr)
     $("#goto").val(curr)
-	
-	
-	
+
+
+
 	//fill bottom
 	for(var index = curr;index < curr + 100;index++){
-    	$("#bottom-container").append("<p id=" + index + ">" +$("#all-container").children().eq(index).text()+ "</p>")	
+    	$("#bottom-container").append("<p id=" + index + ">" +$("#all-container").children().eq(index).text()+ "</p>")
 	}
 	//fill upper
 	for(var index = (parseInt(curr) -1);index + 20  > curr ;index--){
-    	$("#upper-container").prepend("<p id=" + index + ">" +$("#all-container").children().eq(index).text()+ "</p>")	
+    	$("#upper-container").prepend("<p id=" + index + ">" +$("#all-container").children().eq(index).text()+ "</p>")
 	}
 	//$("#upper-container").children().bind("click",this.reset_focus	)
 	//$("#bottom-container").children().bind("click",this.reset_focus	)
@@ -112,9 +112,9 @@ if($("#upper-container").children().length > margin){
 
 function keepBottomFitted(check,fulfil){
 if($("#bottom-container").children().length < check){
-var last = parseInt($("#bottom-container").children().last().attr("id"))+1;	
+var last = parseInt($("#bottom-container").children().last().attr("id"))+1;
 for(var index = last;index < last + fulfil;index++){
-	$("#bottom-container").append("<p id=" + index + ">" +$("#all-container").children().eq(index).text()+ "</p>")	
+	$("#bottom-container").append("<p id=" + index + ">" +$("#all-container").children().eq(index).text()+ "</p>")
 }
 }
 }
@@ -144,7 +144,7 @@ function start() {
 
     $("#truki").show()
     activateFullScreen()
-    setTimeout(blink, 700)
+    setTimeout(blink, 1000)
 }
 
 
@@ -198,7 +198,7 @@ function blink(marks) {
 }
 
 function isEmpty(text){
-return 
+return
 }
 
 function delay(readerText, callback, amount, time_to_read, marks, endOfSentence) {
@@ -263,7 +263,7 @@ function showSpeed(paragraphsText) {
         initTime = new Date()
         counterWords = 0
     }
-	
+
 	if ((now.getTime() - initTime.getTime()) / 1000 > 61){
         $("#speed").text(0)
         initTime = new Date()
@@ -281,7 +281,7 @@ function addMark() {
 
 function addPeriodClass() {
     var text = $("#reader-container").children().last().text();
-    if (text.indexOf(".") != -1 || text.indexOf("\n") != -1 || text.indexOf("?") != -1 ) {
+    if (text.indexOf(".") != -1 || text.indexOf("\n") != -1 || text.indexOf("?") != -1 || text == " ") {
         $("#reader-container").children().addClass("period")
         return true
     }
@@ -332,15 +332,7 @@ $(document).ready(function() {
     $("#goto").bind("blur", function() {
         $("#current").text($(this).val())
         $("#all-container").children().eq($(this).val()).click()
-    })
-    $("#goto").keydown(function(e) {
-        if (e.keyCode == 13) {
-            // user has pressed enter
-            $("#current").text($(this).val())
-            $("#all-container").children().eq($(this).val()).click()
-            return false
-        }
-        });      
+    });
     $("#time-2-read").val(time_to_read)
     $("#time-2-read").bind("change", function(e) {
         time_to_read = $("#time-2-read").val()
@@ -364,6 +356,24 @@ $(document).ready(function() {
     $(document).keydown(function(e) {
             if (e.keyCode == 32) {
                 // user has pressed space
+                halt()
+                return false
+            }
+             if (e.keyCode == 37) {
+                // user has pressed left arrow
+                halt()
+                var last = $("#current").text()-2
+                $("#current").text(last)
+                $("#all-container").children().eq(last).click()
+                halt()
+                return false
+            }
+            if (e.keyCode == 39) {
+                // user has pressed right arrow
+                halt()
+                var last = parseInt($("#current").text(), 10)+2
+                $("#current").text(last)
+                $("#all-container").children().eq(last).click()
                 halt()
                 return false
             }

@@ -36,7 +36,7 @@ FastReader.prototype.find_before_next_word = function(text, from) {
         }
 
     }
-	
+
 	FastReader.prototype.find_after_next_word = function(text, from) {
 	        var nextAlphanum = text.substring(from).search("[A-Za-z]")
 	        if (nextAlphanum == -1) return text.length
@@ -110,7 +110,11 @@ FastReader.prototype.stickyCarriageIndexRecursive = function(paragraph) {
     return scirAcc(paragraph, paragraph.search("\n\\S"))
 }
 
-var marks = ["\n",".’",".'", ".", " (", ") ", , "?", " '", "' "," ‘","’ ",";",", "]
+//var marks = ["\n",".’",".'", ".", " (", ") ", , "?", " '", "' "," ‘","’ ",";",", "]
+
+var marks = ["\n",".",". ","?",";"]
+
+
 
 FastReader.prototype.redistributing_up = function(from, to, amount) {
 
@@ -131,7 +135,7 @@ FastReader.prototype.redistributing_up = function(from, to, amount) {
 FastReader.prototype.update_to = function(to, text, marks, down) {
     var minIndex = this.find_mark(text, marks)
 	if(minIndex == -1){
-		
+
 		}
     var beforeNextWord = this.find_before_next_word(text, minIndex)
     if (to.children().last().text().indexOf("\n") > -1) {
@@ -152,7 +156,7 @@ FastReader.prototype.update_to = function(to, text, marks, down) {
 
 // if(to.children().last().text().indexOf("\n")>-1){
 //   -               to.append('<p></p>')
-// 		}	
+// 		}
 
 
 FastReader.prototype.update_from = function(from, marks, amount, down) {
@@ -192,7 +196,7 @@ FastReader.prototype.find_mark = function(text, marks) {
         if (foundAt != -1 && foundAt < minFoundAt) {
             if (!this.isAcronym(text, foundAt) && !this.isDigit(text, foundAt)) {
 				if(this.isReference(text, foundAt)) {
-					minFoundAt = this.find_after_next_word(text,foundAt) 
+					minFoundAt = this.find_after_next_word(text,foundAt)
 				}else{
                 	minFoundAt = foundAt + 1
 				}
@@ -218,7 +222,7 @@ FastReader.prototype.isReference = function(text, index) {
         if (text.charAt(index - 1).match(/[a-z]/i) && text.charAt(index + 1) == "[") return true
         if (text.charAt(index - 1).match(/[a-z]/i) && text.charAt(index + 1) == "’") return true
         if (text.charAt(index - 1) == ")" && $.isNumeric(text.charAt(index + 1))) return true
-        if (text.charAt(index - 1) == "’" && $.isNumeric(text.charAt(index + 1))) return true	
+        if (text.charAt(index - 1) == "’" && $.isNumeric(text.charAt(index + 1))) return true
     }
 	if(text.charAt(index) == "?"){
         if (text.charAt(index - 1).match(/[a-z]/i) && $.isNumeric(text.charAt(index + 1))) return true
